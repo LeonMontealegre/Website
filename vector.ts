@@ -91,6 +91,9 @@ export class Vector {
     public static dir(a: Vector, b: Vector): Vector {
         return b.sub(a).normalize();
     }
+    public static fromAngle(a: number): Vector {
+        return new Vector(Math.cos(a), Math.sin(a));
+    }
 }
 
 export function V(): Vector;

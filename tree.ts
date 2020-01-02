@@ -13,6 +13,17 @@ export interface TreeSettings {
     ddAngle: number;
 }
 
+function GetPosition(i: number, depth: number, settings: TreeSettings): Vector {
+    let pos = V(0, settings.len + settings.extraLen);
+    for (let d = 1; d <= depth; d++) {
+        let sum = settings.angle;
+        for (var b = 1; b <= d; b++)
+            sum += (2 * ((i >> (depth-1 - (b-1))) & 1) - 1) * (settings.dAngle + (b-1)*settings.ddAngle);
+        pos = pos.add(Vector.fromAngle(sum).scale(settings.len * settings.dLen**d));
+    }
+    return pos;
+}
+
 export class Tree {
     public parent: Tree;
     private children: [Tree, Tree];
@@ -76,8 +87,7 @@ export class Tree {
     }
 
     public dir(): Vector {
-        const a = this.angle();
-        return V(Math.cos(a), Math.sin(a));
+        return Vector.fromAngle(this.angle());
     }
 
     public getStart(): Vector {
@@ -85,7 +95,7 @@ export class Tree {
     }
 
     public getEnd(): Vector {
-        return this.getStart().add(this.dir().scale(this.len()));
+        return this.getStart().add(this.dir().scale(this.len() + (this.parent ? 0 : this.settings.extraLen)));
     }
 
     public draw(p: Painter, d: number, transform: Matrix2x3): void {
