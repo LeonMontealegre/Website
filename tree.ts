@@ -1,5 +1,5 @@
 import {Vector, V} from "./vector";
-import {Matrix2x3} from "matrix";
+import {Matrix2x3} from "./matrix";
 import {Painter, LineStyle} from "./painter";
 
 export interface TreeSettings {
@@ -13,31 +13,45 @@ export interface TreeSettings {
     ddAngle: number;
 }
 
-function GetPosition(i: number, depth: number, settings: TreeSettings): Vector {
-    let pos = V(0, settings.len + settings.extraLen);
-    for (let d = 1; d <= depth; d++) {
-        let sum = settings.angle;
-        for (var b = 1; b <= d; b++)
-            sum += (2 * ((i >> (depth-1 - (b-1))) & 1) - 1) * (settings.dAngle + (b-1)*settings.ddAngle);
-        pos = pos.add(Vector.fromAngle(sum).scale(settings.len * settings.dLen**d));
+export class Tree {
+    public settings: TreeSettings;
+
+    private root: Branch;
+
+    public constructor(settings: TreeSettings, levels: number) {
+        this.settings = settings;
+
+        this.root = new Branch(undefined, settings);
+        this.root.generate(levels);
     }
-    return pos;
+
+    public draw(painter: Painter, transform: Matrix2x3 = new Matrix2x3()): void {
+        this.root.draw(painter, 0, transform)
+    }
+
+    public getRoot(): Branch {
+        return this.root;
+    }
+
+    public getLeaves(): Branch[] {
+        return this.root.getLeafs();
+    }
 }
 
-export class Tree {
-    public parent: Tree;
-    private children: [Tree, Tree];
+export class Branch {
+    public parent: Branch;
+    private children: [Branch, Branch];
 
     private settings: TreeSettings;
 
-    public constructor(parent: Tree, settings: TreeSettings) {
+    public constructor(parent: Branch, settings: TreeSettings) {
         this.parent = parent;
         this.settings = settings;
     }
 
     public generate(levels: number = 0): void {
-        const A = new Tree(this, this.settings);
-        const B = new Tree(this, this.settings);
+        const A = new Branch(this, this.settings);
+        const B = new Branch(this, this.settings);
         this.children = [A, B];
 
         // Generate more levels if > 0
@@ -47,25 +61,11 @@ export class Tree {
         }
     }
 
-    public break(): void {
-        const newSettings = {
-            pos: this.getStart(),
-            len: this.len(),
-            angle: this.angle(),
-            extraLen: this.settings.extraLen,
-            dLen: this.settings.dLen,
-            dAngle: this.settings.dAngle,
-            ddAngle: this.settings.ddAngle
-        }
-        this.parent = undefined;
-        this.settings = newSettings;
-    }
-
-    public get(i: 0 | 1): Tree {
+    public get(i: 0 | 1): Branch {
         return this.children[i];
     }
 
-    public getLeafs(): Tree[] {
+    public getLeafs(): Branch[] {
         if (!this.children)
             return [this];
         return this.get(0).getLeafs().concat(this.get(1).getLeafs());
@@ -108,5 +108,4 @@ export class Tree {
             this.children[1].draw(p, d+1, transform);
         }
     }
-
 }

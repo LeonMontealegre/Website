@@ -83,20 +83,18 @@ export class Canvas {
     private canvas: HTMLCanvasElement;
     private painter: Painter;
 
-    private callback: (canvas: Canvas, painter: Painter) => void;
+    private onResizeCallback: () => void;
 
-    public constructor(id: string, callback: (canvas: Canvas, painter: Painter) => void) {
-        this.callback = callback;
+    public constructor(id: string, onResize: () => void) {
+        this.onResizeCallback = onResize;
 
         this.canvas = document.getElementById(id) as HTMLCanvasElement;
         this.painter = new CanvasPainter(this.canvas);
 
         window.addEventListener("resize", () => this.onResize(), false);
-
-        this.onResize();
     }
 
-    public draw(): void {
+    public draw(func: (p: Painter) => void): void {
         this.painter.save();
 
         this.painter.clear();
@@ -104,16 +102,16 @@ export class Canvas {
         this.painter.translate(V(this.canvas.width/2, this.canvas.height));
         this.painter.scale(V(1, -1));
 
-        this.callback(this, this.painter);
+        func(this.painter);
 
         this.painter.restore();
     }
 
-    private onResize() {
+    public onResize() {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
 
-        this.draw();
+        this.onResizeCallback();
     }
 
     public get width(): number {
