@@ -1,5 +1,5 @@
-import {V} from "./vector";
-import {TreeNavMenu} from "./treenavmenu";
+import {V} from "Vector";
+import {TreeNavMenu} from "./utils/treenav/TreeNavMenu";
 
 new TreeNavMenu("canvas",
                 ["HOME", "ABOUT", "RESUME", "BLOG", "MODELS", "ANIMATIONS", "PROJECTS", "CONTACT"],

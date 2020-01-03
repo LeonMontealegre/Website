@@ -1,4 +1,4 @@
-import {Vector} from "./vector";
+import {Vector} from "Vector";
 
 type CapType = "butt" | "round" | "square";
 export class LineStyle {

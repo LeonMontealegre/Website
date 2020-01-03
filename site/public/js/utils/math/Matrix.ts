@@ -1,4 +1,4 @@
-import {Vector,V} from "./vector";
+import {Vector,V} from "Vector";
 
 export class Matrix2x3 {
     private mat: Array<number>

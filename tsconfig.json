@@ -16,7 +16,12 @@
     "typeRoots" : [
       "node_modules/@types" // path to your typings directory (relative to tsconfig.json)
     ],
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+        "Vector": ["site/public/js/utils/math/Vector"],
+        "math/*": ["site/public/js/utils/math/*"],
+        "utils/*": ["site/public/js/utils/*"]
+    }
   },
   "exclude": [
     "node_modules"

@@ -1,13 +1,13 @@
-import {Vector, V} from "./vector";
-import {Matrix2x3} from "./matrix";
-import {Path, BezierPath, LinePath} from "./path";
+import {Vector, V} from "Vector";
+import {Matrix2x3} from "math/Matrix";
 
-import {Animation} from "./animation";
-import {TreeAnimation} from "./treeanimation";
+import {Path, BezierPath, LinePath} from "utils/animation/Path";
+import {Animation} from "utils/animation/Animation";
 
+import {Canvas} from "utils/canvas/Canvas";
+
+import {TreeAnimation} from "./TreeAnimation";
 import {Branch, Tree, TreeSettings} from "./tree";
-
-import {Canvas} from "./canvas";
 
 export function CreatePath(b1: Branch, b2: Branch): Path {
     const p1 = b1.getEnd();

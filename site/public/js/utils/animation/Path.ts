@@ -1,4 +1,4 @@
-import {Vector, V} from "./vector";
+import {Vector, V} from "Vector";
 
 export interface Path {
     getPos(t: number): Vector;

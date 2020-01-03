@@ -1,7 +1,7 @@
-import {Matrix2x3} from "./matrix";
-import {Path} from "./path";
+import {Matrix2x3} from "math/Matrix";
 
-import {Animation} from "./animation";
+import {Path} from "utils/animation/Path";
+import {Animation} from "utils/animation/Animation";
 
 export class TreeAnimation extends Animation {
     private step2: (t: number, t1: Matrix2x3, t2: Matrix2x3) => void;

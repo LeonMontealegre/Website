@@ -1,6 +1,7 @@
-import {Vector, V} from "./vector";
-import {Matrix2x3} from "./matrix";
-import {Painter, LineStyle} from "./painter";
+import {Vector, V} from "Vector";
+
+import {Matrix2x3} from "math/Matrix";
+import {Painter, LineStyle} from "utils/canvas/painter";
 
 export interface TreeSettings {
     pos: Vector;

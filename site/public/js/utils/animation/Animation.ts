@@ -1,5 +1,5 @@
-import {Vector} from "vector";
-import {Path} from "path";
+import {Vector} from "Vector";
+import {Path} from "./Path";
 
 export class Animation {
     public path: Path;
