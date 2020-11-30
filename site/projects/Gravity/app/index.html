@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="2D Gravity Simulator">
+        <meta name="viewport" content="width=device-width", initial-scale="1">
+
+        <title>Gravity</title>
+        <style>
+            body, html {
+                background-color: #333;
+                color: #fff;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                position: absolute;
+            }
+
+            canvas {
+                position:absolute;
+            }
+
+            .tab {
+                position: fixed;
+                left: 0;
+                top: 0;
+                padding: 1em;
+                border-bottom-right-radius: 15px;
+                font-size: 18;
+                color: #fff;
+                background-color: rgba(255, 255, 255, 0.3);
+            }
+
+            #openOptionsTab {
+                transition: margin-left .5s;
+                padding: 16px;
+            }
+
+            .sidenav {
+                height: 100%;
+                width: 0;
+                position: fixed;
+                z-index: 1;
+                top: 0;
+                left: 0;
+                background-color: rgba(255, 255, 255, 0.3);
+                overflow-x: hidden;
+                transition: 0.5s;
+                padding-top: 0px;
+            }
+
+            .sidenav h4 {
+                padding-left: 1em;
+                padding-right: 1em;
+                font-size: 24px;
+                color: #fff;
+                display: block;
+                transition: 0.3s
+            }
+
+            .sidenav label.sidenav-label {
+                padding-left: 1em;
+                padding-right: 1em;
+                padding-bottom: 0.25em;
+                font-size: 18px;
+                color: #ddd;
+                display: block;
+                transition: 0.3s
+            }
+
+            .sidenav input[type="number"], input[type="button"], input[type="color"] {
+                background-color: rgba(255, 255, 255, 0.1);
+                border-color: transparent;
+                width: 25%;
+                color: #ddd;
+                box-sizing: border-box;
+                transition: 0.3s
+            }
+            .sidenav input[type="button"] {
+                width: 100%;
+            }
+            .sidenav input:disabled, label.sidenav-label[disabled] {
+                color: #aaa;
+            }
+
+            .sidenav label[unselectable], h4[unselectable] {
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+            .sidenav input.toggle-switch + label {
+                width: 100%;
+                height: 20px;
+            }
+            .sidenav input.toggle-switch + label:before, input.toggle-switch + label:after  {
+                position: absolute;
+                left: 1px; top: 1px; bottom: 1px; right: 1px;
+                content: "";
+            }
+            .sidenav input.toggle-switch + label:before {
+                background-color: rgba(255, 255, 255, 0.1);
+                transition: background 0.4s;-webkit-transition: background 0.4s;-moz-transition: background 0.4s;-o-transition: background 0.4s;
+            }
+            .sidenav input.toggle-switch + label:after {
+                width: 30%;
+                background-color: #ddd;
+                transition: margin 0.4s;-webkit-transition: margin 0.4s;-moz-transition: margin 0.4s;-o-transition: margin 0.4s;
+            }
+            .sidenav input.toggle-switch:checked + label:before {
+                background-color: rgba(78, 229, 85, 0.3);
+            }
+            .sidenav input.toggle-switch:checked + label:after {
+                margin-left: 69%;
+            }
+            .sidenav .toggle-switch {
+                position: absolute;
+                visibility: hidden;
+            }
+            .toggle-switch + label {
+                display: block;
+                position: relative;
+                cursor: pointer;
+                outline: none;
+            }
+        </style>
+    </head>
+
+    <body onload="start();">
+        <div id="options" class="sidenav">
+            <h4 unselectable>Controls</h4>
+            <label class="sidenav-label">
+                <input title="Focuses on currently selected planet" type="button" id="focus-on-selection" onclick="onFocusButtonClick();" value="Focus"/>
+            </label>
+            <label class="sidenav-label">
+                <input title="Selects another planet to the 'left'" type="button" id="change-selection-left" onclick="selectLeft();" value="<"/>
+                <input title="Selects another planet to the 'right'" type="button" id="change-selection-right" onclick="selectRight();" value=">"/>
+            </label>
+            <label class="sidenav-label" unselectable>
+                <input type="number" id="time-scale" onchange="onInputChange();" value="1" min="0" max="10" step="0.05"/> Time-Scale
+            </label>
+            <label class="sidenav-label">
+                <input title="Deletes the currently selected planet" type="button" id="remove-selected" onclick="removeSelectedPlanet();" value="Remove Selected"/>
+            </label>
+            <label class="sidenav-label" unselectable>
+                <hr/>
+                <b>Build Mode</b>
+            </label>
+            <label class="sidenav-label">
+                <input type="checkbox" id="build-mode" onchange="onBuildModeChange();" class="toggle-switch"/>
+                <label for="build-mode"></label>
+            </label>
+            <label class="sidenav-label" id="mass-multiplier-label" onchange="onInputChange();" unselectable disabled>
+                <input type="number" id="mass-multiplier" value="1" min="0" max="1000" step="1" disabled/> Mass Multiplier
+            </label>
+            <label class="sidenav-label" id="radius-label" onchange="onInputChange();" unselectable disabled>
+                <input type="number" id="radius" value="50" min="5" max="100000" step="10" disabled/> Radius
+            </label>
+            <label class="sidenav-label" id="color-label" onchange="onInputChange();" unselectable disabled>
+                <input type="color" id="color" value="#ffffff" disabled/> Color
+            </label>
+            <label class="sidenav-label" id="random-color-label" onchange="onInputChange();" unselectable disabled>
+                <input type="checkbox" id="random-color" value="Random" style="margin-left: 2em; margin-bottom: 1em;" disabled/> Random Color
+            </label>
+            <label class="sidenav-label" id="inherit-velocity-label" onchange="onInputChange();" unselectable disabled>
+                <input type="checkbox" id="inherit-velocity" value="Inherit Velocity" style="margin-left: 2em; margin-bottom: 1em;" disabled/> Inherit Velocity
+            </label>
+            <label class="sidenav-label">
+                <input title="Creates a planet for you to place" type="button" id="create-button" onclick="onCreateButtonClick();" value="Create" disabled/>
+            </label>
+        </div>
+
+        <div id="main">
+            <canvas id="canvas"></canvas>
+
+            <div id="openOptionsTab" class="tab" onclick="sidebar();"> > </div>
+
+            <script src="gravity-helper.js"></script>
+            <script src="gravity-vector.js"></script>
+            <script src="gravity-input.js"></script>
+            <script src="gravity-game.js"></script>
+        </div>
+    </body>
+</html>

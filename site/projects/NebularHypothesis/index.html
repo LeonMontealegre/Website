@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="stylesheet" href="/about/style.css">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div class="page-wrap">
+            <header>
+                <div class="planet-header">
+                    <div class="planet-header-line"></div>
+                    <div class="planet-header-circle-1"><p>Home</p></div>
+                    <div class="planet-header-circle-2"><p>About</p></div>
+                    <div class="planet-header-circle-3"><p>Blog</p></div>
+                    <div class="planet-header-circle-4"><p>Projects</p></div>
+                    <div class="planet-header-circle-5"><p>Animations</p></div>
+                    <div class="planet-header-circle-6"><p>Models</p></div>
+                </div>
+            </header>
+
+            <div class="container mt-5">
+                <img alt="Nebular Hypothesis thumbnail"
+                     style="height: 550px; width: 100%; display: block; object-fit: contain;"
+                     src="/projects/NebularHypothesis/index.png">
+                <h1 class="text-dark text-center my-5">Nebular Hypothesis</h1>
+                <div class="text-dark h3">
+                    <p>A simple simulator that I made using HTML, CSS, and JavaScript.</p>
+                    <p>Very similar to my other gravity simulation: this simulation shows how a
+                       large collection of objects naturally forms to create a solar system similar
+                       to our own. There’s almost always a single star in the middle and the occasional
+                       planets that orbit it. Most satellites of the star go in a single direction based
+                       on the original total angular velocity of the objects, while most retrograde ones
+                       quickly collide with other masses and either change direction or fall into the center.</p>
+                    <p>Here’s an interactive version with parameters to fiddle around with.</p>
+                    <p>(Note that more objects = more processing power, and as time passes, the faster the simulation is able to run)</p>
+                </div>
+                <div class="text-center my-5">
+                    <a type="button" class="btn btn-lg btn-primary" href="/projects/NebularHypothesis/app/" target="_blank">Go to visualizer</a>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div id="name" class="bottom__right">leonmontealegre.com</div>
+        </footer>
+
+        <script src="/index.js"></script>
+    </body>
+</html>

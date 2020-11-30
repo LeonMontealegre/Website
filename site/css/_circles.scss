@@ -1,0 +1,16 @@
+
+$sun-x: 13vmin;
+$sun-y: 13vmin;
+
+$orbit-w: 4px;
+
+// index radius x-pos y-pos font-size
+$circles:
+    1  10vmin  $sun-x $sun-y 4vmin, // Home
+    2   5vmin  30vmin 30vmin 2.5vmin, // About
+    3   4vmin  35vmin 50vmin 2.3vmin, // Blog
+    4   6vmin  20vmin 75vmin 2.8vmin, // Projects
+    5   8vmin  80vmin 50vmin 3vmin, // Animations
+    6   5vmin  85vmin 80vmin 2.2vmin; // Models
+
+$circle-expand: 1.3;

@@ -1,0 +1,50 @@
+@import "circles";
+
+
+$header-height: 300px;
+.planet-header {
+    width: 100%;
+    height: $header-height;
+
+    &-line {
+        $line-b-width: 2px;
+
+        width: calc(100% - #{$line-b-width * 2});
+        height: 0;
+        position: absolute;
+        top: $header-height/2;
+        border: solid $line-b-width transparentize(nth($colors, 1), 0.2);
+    }
+
+    @each $i,$radius,$x in $circles {
+        &-circle-#{$i} {
+            position: absolute;
+
+            width: 2*$radius;
+            height: 2*$radius;
+
+            top: calc(#{$header-height/2} - #{$radius});
+            left: calc(#{$x} - #{$radius});
+
+            background-color: nth($colors, $i);
+            border-radius: 50%;
+
+            line-height: 2*$radius;
+            text-align: center;
+            transform-origin: center;
+            transition: transform 0.5s;
+
+            $shadow-dist: $radius * 1.414 / 10;
+
+            box-shadow: $shadow-dist $shadow-dist 0px 0px darken(nth($colors, $i), 20%);
+
+            & p {
+                margin: 0;
+                font-size: $radius/3;
+            }
+            &:hover {
+                transform: scale($circle-expand);
+            }
+        }
+    }
+}

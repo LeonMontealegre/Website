@@ -1,0 +1,7 @@
+@import "node_modules/bootstrap/scss/bootstrap";
+
+@import "site/css/shared", "site/css/colors", "site/css/header";
+
+.planet-header-line {
+    border-color: transparentize(nth($colors, 4), 0.2);
+}

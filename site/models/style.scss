@@ -1,0 +1,11 @@
+@import "node_modules/bootstrap/scss/bootstrap";
+
+@import "site/css/shared", "site/css/colors", "site/css/header";
+
+iframe {
+    background-color: rgb(217, 217, 217);
+}
+
+.planet-header-line {
+    border-color: transparentize(nth($colors, 6), 0.2);
+}

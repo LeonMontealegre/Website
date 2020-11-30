@@ -1,0 +1,121 @@
+@import "css/shared", "css/colors", "css/circles", "css/math";
+
+
+
+$shadow-angle: 45deg;
+
+
+body, html {
+    overflow: hidden;
+}
+
+@keyframes rotate {
+    from {transform: rotate(0deg);}
+    to {transform: rotate(360deg);}
+}
+@keyframes grow {
+    from {transform: scale(1);}
+    to {transform: scale(30);}
+}
+@keyframes fade {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+.grow-over {
+    animation: grow 2s linear 0s 1 normal;
+    animation-fill-mode: forwards;
+
+    z-index: 100;
+    & p {
+        animation: fade 1s linear 0s 1 normal;
+        animation-fill-mode: forwards;
+        backface-visibility: hidden;
+        transform: translateZ(0);
+    }
+}
+
+
+@keyframes pulseAnimation {
+    0%   { transform: scale3d(1, 1, 1); }
+    30%  { transform: scale3d(1.2, 1.2, 1.2); }
+    70%  { transform: scale3d(0.2, 0.2, 0.2); }
+    100% { transform: scale3d(1, 1, 1); }
+}
+@keyframes glowingAnimation {
+    0%   { opacity: var(--star-brightness, 1); }
+    100% { opacity: calc(var(--star-brightness, 1) * 0.5); }
+}
+
+@keyframes shootingStarAnimation {
+    0% { transform: translate(0, 0); opacity: 0; }
+    50% { opacity: var(--star-brightness, 1); }
+    100% { transform: translate(var(--star-target-dx), var(--star-target-dy)); opacity: 0; }
+}
+
+.star {
+    animation:
+	    pulseAnimation var(--star-animation-duration, 3000ms) infinite backwards,
+	    glowingAnimation var(--star-animation-glow-duration, 5000ms) infinite alternate backwards;
+
+    animation-delay: var(--star-animation-delay, 0);
+}
+.shooting__star {
+    animation:
+	    shootingStarAnimation var(--star-animation-duration, 3000ms) infinite backwards;
+
+    animation-delay: var(--star-animation-delay, 0);
+}
+
+
+@each $i,$radius,$x,$y,$f-size in $circles {
+    .circle-#{$i} {
+        position: absolute;
+
+        width: 2*$radius;
+        height: 2*$radius;
+
+        top: calc(#{$y} - #{$radius});
+        left: calc(#{$x} - #{$radius});
+
+        background-color: nth($colors, $i);
+        border-radius: 50%;
+
+        line-height: 2*$radius;
+        text-align: center;
+        transform-origin: center;
+        transition: transform 0.5s;
+
+        $shadow-dist: $radius * 1.414 / 10;
+
+        box-shadow: $shadow-dist*cos($shadow-angle) $shadow-dist*sin($shadow-angle) 0px 0px darken(nth($colors, $i), 20%);
+
+        & p {
+            margin: 0;
+            font-size: $f-size;
+        }
+        &:hover {
+            transform: scale($circle-expand);
+        }
+    }
+
+    .orbit-#{$i} {
+        $dx: ($x - $sun-x)/1vmin;
+        $dy: ($y - $sun-y)/1vmin;
+
+        $r: _sqrt($dx*$dx + $dy*$dy) * 1vmin;
+
+        position: absolute;
+
+        left: $sun-x - $r;
+        top: $sun-y - $r;
+
+        width: 2*$r;
+        height: 2*$r;
+
+        border: $orbit-w solid transparentize(desaturate(nth($colors,$i), 15%), 0.5);
+        border-radius: 50%;
+
+        box-shadow:       (5px * cos($shadow-angle)) (5px * sin($shadow-angle)) 0px 0px transparentize(darken(desaturate(nth($colors,$i), 15%), 20%), 0.4),
+                    inset (5px * cos($shadow-angle)) (5px * sin($shadow-angle)) 0px 0px transparentize(darken(desaturate(nth($colors,$i), 15%), 20%), 0.4);
+    }
+}

@@ -1,0 +1,13 @@
+@import "site/css/shared", "site/css/colors", "site/css/header";
+
+div {
+    text-align: center;
+}
+h1 {
+    margin-top: 20%;
+    color: black;
+}
+
+.planet-header-line {
+    border-color: transparentize(nth($colors, 3), 0.2);
+}

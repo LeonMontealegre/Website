@@ -1,0 +1,34 @@
+{
+  "name": "website",
+  "description": "Leon Montealegre's Website",
+  "author": "Leon Montealegre",
+  "version": "0.0.1",
+  "license": "Unlicense",
+  "devDependencies": {
+    "concurrently": "^5.1.0",
+    "copyfiles": "^2.2.0",
+    "node-sass": "^4.12.0",
+    "nodemon": "^2.0.3",
+    "npm-watch": "^0.6.0",
+    "serve": "^11.3.0"
+  },
+  "scripts": {
+    "build:css": "node-sass ./site/ -o ./build/",
+    "build:copy": "copyfiles -u 1 \"site/*.{html}\" \"site/**/*.{html,ttf,png,jpeg,js,wasm,map,mp3}\" \"build\"",
+    "build": "npm run build:copy && npm run build:css",
+    "start": "serve ./build",
+    "watch": "concurrently \"npm run watch:css\" \"npm-watch\"",
+    "watch:css": "npm run build:css -- --watch"
+  },
+  "watch": {
+    "build:copy": {
+      "patterns": [
+        "site"
+      ],
+      "extensions": "html,js,ttf,jpg,png,wasm,map,mp3"
+    }
+  },
+  "dependencies": {
+    "bootstrap": "^4.4.1"
+  }
+}
