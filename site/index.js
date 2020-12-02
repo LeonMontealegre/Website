@@ -4,7 +4,7 @@ $("[class*=circle]").on("click", function() {
     // $(this).addClass("grow-over");
     // setTimeout(() => {
     let text = $(this).children().text().toLowerCase();
-    if (text == "home")
+    if (text == "home" || text == "back")
         text = "";
     window.location.href = `/${text}`;
     // }, 1800);

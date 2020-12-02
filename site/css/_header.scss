@@ -1,50 +1,61 @@
 @import "circles";
 
 
-$header-height: 300px;
+$header-height: 200px;
 .planet-header {
+    $radius: 150px;
+    $circle-px: 20px;
+    $circle-py: 20px;
+
     width: 100%;
     height: $header-height;
 
     &-line {
         $line-b-width: 2px;
 
-        width: calc(100% - #{$line-b-width * 2});
+        width: calc(100% - #{$line-b-width*2});
         height: 0;
         position: absolute;
-        top: $header-height/2;
+        top: $circle-py;
         border: solid $line-b-width transparentize(nth($colors, 1), 0.2);
     }
 
-    @each $i,$radius,$x in $circles {
-        &-circle-#{$i} {
+    &-circle {
+        position: absolute;
+
+        width: 2*$radius;
+        height: 2*$radius;
+
+        top: -$radius;
+        left: -$radius;
+
+        border-radius: 50%;
+
+        transform-origin: center;
+        transition: transform 0.5s;
+
+        & p {
             position: absolute;
 
-            width: 2*$radius;
-            height: 2*$radius;
+            left: $radius + $circle-px;
+            top: $radius + $circle-py;
 
-            top: calc(#{$header-height/2} - #{$radius});
-            left: calc(#{$x} - #{$radius});
+            margin: 0;
+            font-size: $radius/4;
+
+            text-align: center;
+        }
+        &:hover {
+            transform: scale($circle-expand);
+        }
+    }
+
+    @each $i,$r2,$x in $circles {
+        &-circle-#{$i} {
+            $shadow-dist: $header-height * 1.414 / 30;
 
             background-color: nth($colors, $i);
-            border-radius: 50%;
-
-            line-height: 2*$radius;
-            text-align: center;
-            transform-origin: center;
-            transition: transform 0.5s;
-
-            $shadow-dist: $radius * 1.414 / 10;
-
             box-shadow: $shadow-dist $shadow-dist 0px 0px darken(nth($colors, $i), 20%);
-
-            & p {
-                margin: 0;
-                font-size: $radius/3;
-            }
-            &:hover {
-                transform: scale($circle-expand);
-            }
         }
     }
 }
