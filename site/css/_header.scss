@@ -2,23 +2,14 @@
 
 
 $header-height: 200px;
-.planet-header {
+.header {
     $radius: 150px;
     $circle-px: 20px;
     $circle-py: 20px;
+    $line-b-width: 2px;
 
     width: 100%;
     height: $header-height;
-
-    &-line {
-        $line-b-width: 2px;
-
-        width: calc(100% - #{$line-b-width*2});
-        height: 0;
-        position: absolute;
-        top: $circle-py;
-        border: solid $line-b-width transparentize(nth($colors, 1), 0.2);
-    }
 
     &-circle {
         position: absolute;
@@ -51,6 +42,16 @@ $header-height: 200px;
     }
 
     @each $i,$r2,$x in $circles {
+        &-line-#{$i} {
+            position: absolute;
+
+            width: calc(100% - #{$line-b-width*2});
+            height: 0;
+
+            top: $circle-py;
+
+            border: solid $line-b-width transparentize(nth($colors, $i), 0.2);
+        }
         &-circle-#{$i} {
             $shadow-dist: $header-height * 1.414 / 30;
 

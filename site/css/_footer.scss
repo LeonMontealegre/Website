@@ -1,0 +1,89 @@
+
+$footer-height: 50px;
+
+.footer {
+    display: flex;
+    flex-direction: row;
+
+    z-index: 10;
+
+    align-self: flex-end;
+
+    justify-content: space-between;
+
+    width: 100%;
+
+    height: $footer-height;
+    line-height: $footer-height;
+
+    vertical-align: middle;
+
+    &-left, &-right {
+        display: flex;
+
+        & span {
+            line-height: 1;
+            align-self: flex-end;
+
+            margin: 10px;
+        }
+    }
+    &-icons {
+        display: flex;
+        flex-direction: row;
+
+        justify-content: center;
+    }
+}
+
+.fa {
+    $size: 0.6;
+
+    width: $footer-height * $size;
+    height: $footer-height * $size;
+    line-height: $footer-height * $size !important;
+
+    vertical-align: middle;
+
+    margin-top: calc(#{$footer-height * (1 - $size)/2});
+    margin-left: 5px;
+    margin-right: 5px;
+
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50%;
+}
+
+.fa:hover {
+    opacity: 0.7;
+}
+
+.fa-facebook {
+    background: #3B5998;
+    color: white;
+}
+
+.fa-twitter {
+    background: #55ACEE;
+    color: white;
+}
+
+.fa-linkedin {
+    background: #007bb5;
+    color: white;
+}
+
+.fa-youtube {
+    background: #bb0000;
+    color: white;
+}
+
+.fa-instagram {
+    background: #125688;
+    color: white;
+}
+
+.fa-github {
+    background: #373737;
+    color: white;
+}

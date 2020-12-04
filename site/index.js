@@ -10,6 +10,32 @@ $("[class*=circle]").on("click", function() {
     // }, 1800);
 });
 
+$(window).on("resize load", () => {
+    document.documentElement.style.setProperty("--h-unit", `${window.innerHeight/100}px`);
+
+    const w = $(window).width();
+    const h = $(window).height();
+    const ratio = w/h;
+
+    const a = 8;
+    const b = 5;
+
+    if (w/h < 4/5) {
+        const t = Math.min((4/5 - ratio) / 0.6, 1);
+
+        $("[class^='circle-']").each((_, planet) => {
+            const angle = window.getComputedStyle(planet).getPropertyValue("--angle");
+
+            const l = Math.pow(1 - Math.pow(1 - t, a/b), b/a);
+
+            const newAngle = angle * (1 - l) + 90 * l;
+
+            planet.style.setProperty("--sin", Math.sin(newAngle * Math.PI / 180));
+            planet.style.setProperty("--cos", Math.cos(newAngle * Math.PI / 180));
+        });
+    }
+});
+
 $(() => {
     //
     // Create stars

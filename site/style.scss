@@ -1,5 +1,4 @@
-@import "css/shared", "css/colors", "css/circles", "css/math";
-
+@import "css/shared", "css/colors", "css/circles", "css/math", "css/footer";
 
 
 $shadow-angle: 45deg;
@@ -66,28 +65,38 @@ body, html {
     animation-delay: var(--star-animation-delay, 0);
 }
 
+:root {
+    --h-unit: 1vh;
+}
 
-@each $i,$radius,$x,$y,$f-size in $circles {
+footer {
+    margin-top: auto;
+}
+
+
+@each $i,$radius,$r,$theta,$f-size in $circles2 {
     .circle-#{$i} {
         position: absolute;
 
-        width: 2*$radius;
-        height: 2*$radius;
+        width:  calc(#{2 * $radius} * var(--h-unit));
+        height: calc(#{2 * $radius} * var(--h-unit));
 
-        top: calc(#{$y} - #{$radius});
-        left: calc(#{$x} - #{$radius});
+        top:  calc(#{($r * sin($theta * 1deg) + $sun-y - $radius)} * var(--h-unit));
+        left: calc(#{($r * cos($theta * 1deg) + $sun-x - $radius)} * var(--h-unit));
 
         background-color: nth($colors, $i);
         border-radius: 50%;
 
-        line-height: 2*$radius;
+        line-height: calc(#{2 * $radius} * var(--h-unit));
         text-align: center;
         transform-origin: center;
         transition: transform 0.5s;
 
         $shadow-dist: $radius * 1.414 / 10;
 
-        box-shadow: $shadow-dist*cos($shadow-angle) $shadow-dist*sin($shadow-angle) 0px 0px darken(nth($colors, $i), 20%);
+        box-shadow: calc(#{$shadow-dist*cos($shadow-angle)} * var(--h-unit))
+                    calc(#{$shadow-dist*sin($shadow-angle)} * var(--h-unit))
+                    0px 0px darken(nth($colors, $i), 20%);
 
         & p {
             margin: 0;
@@ -96,26 +105,69 @@ body, html {
         &:hover {
             transform: scale($circle-expand);
         }
+
+        @media screen and (max-aspect-ratio: 1/1) {
+            width:  2vw*$radius;
+            height: 2vw*$radius;
+
+            top:  ($r * sin($theta * 1deg) + $sun-y - $radius) * 1vw;
+            left: ($r * cos($theta * 1deg) + $sun-x - $radius) * 1vw;
+
+            line-height: 2vw*$radius;
+
+            $shadow-dist: $radius * 1.414vw / 10;
+            box-shadow: $shadow-dist*cos($shadow-angle) $shadow-dist*sin($shadow-angle) 0px 0px darken(nth($colors, $i), 20%);
+        }
+        @media screen and (max-aspect-ratio: 4/5) {
+            width:  calc(#{4/5 * 2 * $radius} * var(--h-unit));
+            height: calc(#{4/5 * 2 * $radius} * var(--h-unit));
+
+            --angle: #{$theta};
+
+            --sin: #{sin($theta * 1deg)};
+            --cos: #{cos($theta * 1deg)};
+
+            top:  calc((#{$r} * var(--sin) + #{$sun-y - $radius}) * 4/5 * var(--h-unit));
+            left: calc((#{$r} * var(--cos) + #{$sun-x - $radius}) * 4/5 * var(--h-unit));
+
+            line-height: calc(#{4/5 * 2 * $radius} * var(--h-unit));
+
+            $shadow-dist: $radius * 4/5 * 1.414 / 10;
+
+            box-shadow: calc(#{$shadow-dist*cos($shadow-angle)} * var(--h-unit))
+                        calc(#{$shadow-dist*sin($shadow-angle)} * var(--h-unit))
+                        0px 0px darken(nth($colors, $i), 20%);
+        }
     }
 
     .orbit-#{$i} {
-        $dx: ($x - $sun-x)/1vmin;
-        $dy: ($y - $sun-y)/1vmin;
-
-        $r: _sqrt($dx*$dx + $dy*$dy) * 1vmin;
-
         position: absolute;
 
-        left: $sun-x - $r;
-        top: $sun-y - $r;
+        left: calc(#{$sun-x - $r} * var(--h-unit));
+        top:  calc(#{$sun-y - $r} * var(--h-unit));
 
-        width: 2*$r;
-        height: 2*$r;
+        width:  calc(#{2*$r} * var(--h-unit));
+        height: calc(#{2*$r} * var(--h-unit));
 
         border: $orbit-w solid transparentize(desaturate(nth($colors,$i), 15%), 0.5);
         border-radius: 50%;
 
         box-shadow:       (5px * cos($shadow-angle)) (5px * sin($shadow-angle)) 0px 0px transparentize(darken(desaturate(nth($colors,$i), 15%), 20%), 0.4),
                     inset (5px * cos($shadow-angle)) (5px * sin($shadow-angle)) 0px 0px transparentize(darken(desaturate(nth($colors,$i), 15%), 20%), 0.4);
+
+        @media screen and (max-aspect-ratio: 1/1) {
+            left: ($sun-x - $r) * 1vw;
+            top:  ($sun-y - $r) * 1vw;
+
+            width:  2*$r * 1vw;
+            height: 2*$r * 1vw;
+        }
+        @media screen and (max-aspect-ratio: 4/5) {
+            left: calc(#{$sun-x - $r} * 4/5 * var(--h-unit));
+            top:  calc(#{$sun-y - $r} * 4/5 * var(--h-unit));
+
+            width:  calc(#{2*$r} * 4/5 * var(--h-unit));
+            height: calc(#{2*$r} * 4/5 * var(--h-unit));
+        }
     }
 }

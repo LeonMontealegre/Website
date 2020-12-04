@@ -1,4 +1,4 @@
-@import "site/css/shared", "site/css/colors", "site/css/header";
+@import "site/css/shared", "site/css/colors", "site/css/header", "site/css/footer";
 
 div {
     text-align: center;
@@ -6,8 +6,4 @@ div {
 h1 {
     margin-top: 20%;
     color: white;
-}
-
-.planet-header-line {
-    border-color: transparentize(nth($colors, 3), 0.2);
 }
