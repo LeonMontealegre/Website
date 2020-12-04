@@ -1,0 +1,447 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Smoothed Particle Hydrodynamics</title>
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/custom.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section style="height: 100%">
+					<h3>Smoothed Particle Hydrodynamics</h3>
+					<h5>+ Positional Based Dynamics</h5>
+					<p>
+						<small>by Leon Montealegre</small>
+					</p>
+					<iframe id="iframe1" src="./sph/index.html" width="50%" height="20%" style="margin-top: 25%"></iframe>
+					<script>
+						const frame1 = document.getElementById("iframe1");
+						frame1.onload = function() {
+							console.log(frame1);
+							frame1.contentWindow.postMessage({
+								scene: 0,
+								bounds: {l: 0, r: 1, b: 0, t: 0.4},
+								nx: 20,
+								ny: 17,
+								init: true,
+								start: false
+							}, '*');
+						}
+						// window.addEventListener('keyup', (e) => {
+						// 	frame1.contentWindow.postMessage({
+						// 		keyup: {keyCode: e.keyCode}
+						// 	}, '*');
+						// }, false);
+					</script>
+				</section>
+
+
+				<section style="height: 100%">
+					<h3>References</h3>
+
+					<table>
+						<thead>
+							<tr>
+								<th style="vertical-align: bottom;">
+									<small>Particle-Based Fluid Simulation for Interactive Application</small>
+									<small style="vertical-align: bottom;"><small>Müller et al.</small></small>
+								</th>
+								<th style="vertical-align: bottom;">
+									<small>Unified Particle Physics for Real-Time Applications</small>
+									<small style="vertical-align: bottom;"><small>Macklin and Müller et al.</small></small>
+								</th>
+								<th style="vertical-align: bottom;">
+									<small>Position Based Fluids</small>
+									<small style="vertical-align: bottom;"><small>Müller and Macklin</small></small>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><img src="img/ref1.png"></img></td>
+								<td><img src="img/ref2.png"></img></td>
+								<td><img src="img/ref3.png"></img></td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+
+				<section style="height: 100%">
+					<section style="height: 100%">
+						<h3>SPH: General Idea</h3>
+
+						<h5 style="text-align: left; font-size: 0.65em;">
+							<ul>
+								<li>Fluid discretized as particles that each represent an amount of volume</li>
+								<li>Each particle has discretized attributes which are interpolated to evalute anywhere</li>
+								<img src="img/diagram1.png" width="35%" style="margin-top: 10%; margin-left: 20%; float: right; border: none; background: none; box-shadow: none;"></img>
+								<li>Attributes interpolated via "kernels"</li>
+								<li>Attributes derived from Navier-Stokes Equation</li>
+								<small style="margin-left: 5%;">
+									$$ \rho\frac{\partial u}{\partial t} = -\nabla p + \mu\nabla^2u + \rho g $$
+								</small>
+								<li>Attributes computed from summing up contributions from neighboring particles, j</li>
+								<small style="margin-left: 5%;">
+								$$ A_i = \sum_j \frac{m_j}{\rho_j}A_jW(x_{ij}, h) $$
+								</small>
+								<li>Gradient and Laplacian are easy to compute!</li>
+								<small style="margin-left: 5%;">
+								$$ \nabla A_i = \sum_j \frac{m_j}{\rho_j}A_j\nabla W(x_{ij}, h) $$
+								</small>
+								<small style="margin-left: 5%;">
+								$$ \nabla^2 A_i = \sum_j \frac{m_j}{\rho_j}A_j\nabla^2 W(x_{ij}, h) $$
+								</small>
+							</ul>
+						</h5>
+					</section>
+					<section style="height: 100%">
+						<h3>Density and Pressure</h3>
+						<small>
+							$$ \rho\frac{\partial u}{\partial t} = -\nabla p + \mu\nabla^2u + \rho g $$
+						</small>
+
+						<table>
+							<thead>
+								<tr>
+									<th style="vertical-align: bottom;">
+										<small>Density</small>
+									</th>
+									<th style="vertical-align: bottom;">
+										<small>Pressure</small>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<small>$$ A = \rho $$</small><br/>
+										<small>$$ \rho_i = \sum_j m_jW(x_{ij}, h) $$</small>
+									</td>
+									<td>
+										<small>$$ A = p $$</small><br/>
+										<!-- <small>Ideal Gas Law:</small><br/> -->
+										<small>$$ p = k\rho $$</small><br/>
+										<small>$$ p_i = k(\rho_i - \rho_0) $$</small>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</section>
+					<section style="height: 100%">
+						<h3>Forces</h3>
+						<small>
+							$$ \rho\frac{\partial u}{\partial t} = -\nabla p + \mu\nabla^2u + \rho g $$
+						</small>
+
+						<table>
+							<thead>
+								<tr>
+									<th style="vertical-align: bottom;">
+										<small>External (Gravity)</small>
+									</th>
+									<th style="vertical-align: bottom;">
+										<small>Pressure</small>
+									</th>
+									<th style="vertical-align: bottom;">
+										<small>Viscosity</small>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<small>$$ f^{gravity}_i = \rho_i g $$</small>
+									</td>
+									<td>
+										<small>$$ f^{pressure}_i = -\nabla p_i $$</small><br/>
+										<small>$$ f^{pressure}_i = \sum_j\frac{m_j}{\rho_j}p_j\nabla W(x_{ij}, h) $$</small><br/>
+									</td>
+									<td>
+										<small>$$ f^{viscosity}_i = \mu\nabla^2 p_i $$</small><br/>
+										<small>$$ f^{viscosity}_i = \mu\sum_j \frac{m_j}{\rho_j}u_j\nabla^2 W(x_{ij}, h) $$</small>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</section>
+					<section style="height: 100%">
+						<h3>Kernels</h3>
+
+						<h5 style="text-align: left;">3 Types:</h5>
+						<h5 style="text-align: left; font-size: 0.8em;">
+							<ul>
+								<li>Poly6: Used for most attributes</li>
+								<small>
+								$$ W_{poly6}(r, h) = \frac{315}{64\pi h^9}
+													\begin{cases}
+													  (h^2 - r^2)^3 & 0 \leq r \leq h \\
+													  0 & \text{otherwise}
+													\end{cases}$$
+								</small>
+								<img src="img/wpoly6graph.png" width="15%" style="float: right; border: none; background: none; box-shadow: none;"></img>
+
+								<li>Spiky: Used for pressure</li>
+								<small>
+								$$ W_{spiky}(r, h) = \frac{15}{\pi h^6}
+													\begin{cases}
+													  (h - r)^3 & 0 \leq r \leq h \\
+													  0 & \text{otherwise}
+													\end{cases}$$
+								</small>
+								<img src="img/wspikygraph.png" width="15%" style="float: right; border: none; background: none; box-shadow: none;"></img>
+
+								<li>Viscosity: Used for viscosity</li>
+								<small>
+								$$ W_{viscosity}(r, h) = \frac{15}{2\pi h^3}
+													\begin{cases}
+													  -\frac{r^3}{2h^3} + \frac{r^2}{h^2} + \frac{h}{2r} - 1 & 0 \leq r \leq h \\
+													  0 & \text{otherwise}
+													\end{cases}$$
+								</small>
+								<img src="img/wviscositygraph.png" width="15%" style="float: right; border: none; background: none; box-shadow: none;"></img>
+							</ul>
+						</h5>
+					</section>
+				</section>
+
+
+				<section style="height: 100%">
+					<h3>PBD: General Idea</h3>
+
+					<h5 style="text-align: left; font-size: 0.65em;">
+						<ul>
+							<li>Particles are connected via "constraints" which replace forces & numerical integration</li>
+							<li>Very fast, very stable and produce plausible results</li>
+							<li>Provot correction is a type of constraint</li>
+						</ul>
+					</h5>
+
+					<table>
+						<thead>
+							<tr>
+								<th style="vertical-align: bottom;">
+									<small>Density Constraint</small>
+								</th>
+								<th style="vertical-align: bottom;">
+									<small>Distance Constraint (AKA Provot Correction)</small>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<small>$$ C_i(x_i,\ldots,x_n) = \frac{\rho_i}{\rho_0} - 1 $$</small><br/>
+									<small>$$ C(x + \Delta x) = 0 $$</small>
+								</td>
+								<td>
+									<small>$$ C_i(x_i, x_j) = |x_i - x_j| - d_0 $$</small><br/>
+									<small style="margin-top: 5%">$$ C(x + \Delta x) = 0 $$</small>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+
+				<section style="height: 100%">
+					<section style="height: 100%">
+						<h3>Demos</h3>
+
+						<iframe id="iframe2" src="./sph/index.html" width="100%" height="80%"></iframe>
+						<script>
+							const frame2 = document.getElementById("iframe2");
+							frame2.onload = function() {
+								frame2.contentWindow.postMessage({
+									scene: 1,
+									bounds: {l: 0, r: 1, b: 0, t: 0.6},
+									nx: 20,
+									ny: 25,
+									init: true,
+									start: false
+								}, '*');
+							}
+						</script>
+					</section>
+					<section style="height: 100%">
+						<h3>Demos</h3>
+
+						<iframe id="iframe3" src="./sph/index.html" width="100%" height="80%"></iframe>
+						<script>
+							const frame3 = document.getElementById("iframe3");
+							frame3.onload = function() {
+								frame3.contentWindow.postMessage({
+									scene: 2,
+									bounds: {l: 0, r: 1, b: 0, t: 0.6},
+									nx: 20,
+									ny: 25,
+									init: true,
+									start: false
+								}, '*');
+							}
+						</script>
+					</section>
+					<section style="height: 100%">
+						<h3>Demos</h3>
+
+						<iframe id="iframe4" src="./sph/index.html" width="100%" height="80%"></iframe>
+						<script>
+							const frame4 = document.getElementById("iframe4");
+							frame4.onload = function() {
+								frame4.contentWindow.postMessage({
+									scene: 3,
+									bounds: {l: 0, r: 1, b: 0, t: 1},
+									nx: 20,
+									ny: 30,
+									init: true,
+									start: false
+								}, '*');
+							}
+						</script>
+					</section>
+					<section style="height: 100%">
+						<h3>Demos</h3>
+
+						<iframe id="iframe5" src="./sph/index.html" width="100%" height="80%"></iframe>
+						<script>
+							const frame5 = document.getElementById("iframe5");
+							frame5.onload = function() {
+								frame5.contentWindow.postMessage({
+									scene: 4,
+									bounds: {l: 0, r: 1, b: 0, t: 0.8},
+									nx: 20,
+									ny: 30,
+									init: true,
+									start: false
+								}, '*');
+							}
+						</script>
+					</section>
+					<section style="height: 100%">
+						<h3>Demos</h3>
+
+						<iframe id="iframe6" src="./sph/index.html" width="100%" height="80%"></iframe>
+						<script>
+							const frame6 = document.getElementById("iframe6");
+							frame6.onload = function() {
+								frame6.contentWindow.postMessage({
+									scene: 5,
+									bounds: {l: 0, r: 1, b: 0, t: 0.8},
+									nx: 20,
+									ny: 30,
+									init: true,
+									start: false
+								}, '*');
+							}
+						</script>
+					</section>
+					<section style="height: 100%">
+						<h3>Demos</h3>
+
+						<iframe id="iframe7" src="./sph/index.html" width="100%" height="80%"></iframe>
+						<script>
+							const frame7 = document.getElementById("iframe7");
+							frame7.onload = function() {
+								frame7.contentWindow.postMessage({
+									scene: 6,
+									bounds: {l: 0, r: 1, b: 0, t: 0.8},
+									nx: 20,
+									ny: 10,
+									init: true,
+									start: false
+								}, '*');
+							}
+						</script>
+					</section>
+					<section style="height: 100%">
+						<h3>Demos</h3>
+
+						<div>
+							Viscosity: <input id="viscosity-slider" type="range" min="1.0" max="30.0" step="0.1" value="3.5"></input>
+						</div>
+						<iframe id="iframe8" src="./sph/index.html" width="100%" height="70%"></iframe>
+						<script>
+							const frame8 = document.getElementById("iframe8");
+							const slider = document.getElementById("viscosity-slider");
+							slider.oninput = function(e) {
+								frame8.contentWindow.postMessage({
+									viscosity: slider.value
+								}, '*');
+							}
+							frame8.onload = function() {
+								frame8.contentWindow.postMessage({
+									scene: 7,
+									bounds: {l: 0, r: 1, b: 0, t: 0.8},
+									nx: 20,
+									ny: 30,
+									init: true,
+									start: false
+								}, '*');
+							}
+						</script>
+					</section>
+				</section>
+
+
+				<section style="height: 100%">
+					<h3>Future Work</h3>
+
+					<h5 style="text-align: left; font-size: 1.0em;">
+						<ul>
+							<li>Using Compute Shaders to dramatically increase the efficiency of the simulation</li>
+							<li>Better rendering techniques such as Marching Cubes or Ellipsoid Splatting</li>
+							<li>Coupled rigidbody simulation/cloth simulation by extending PBD</li>
+						</ul>
+					</h5>
+
+					<img src="img/ellipsoidsplatting.jpg" width="45%"></img>
+					<img src="img/coupled.jpg" width="45%"></img>
+				</section>
+
+
+				<section style="height: 100%" data-background-iframe="./sph/index2.html">
+					<h3 style="color: #555;">Questions?</h3>
+				</section>
+			</div>
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				center: false,
+				hash: true,
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+		</script>
+	</body>
+</html>
