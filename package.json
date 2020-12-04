@@ -14,8 +14,8 @@
   },
   "scripts": {
     "build:css": "node-sass ./site/ -o ./build/",
-    "build:copy1": "copyfiles -e \"site/img/*\" -u 1 \"site/*.{html}\" \"site/**/*.{html,ttf,png,jpeg,js,wasm,map,mp3}\" \"build\"",
-    "build:copy2": "copyfiles -u 2 \"site/img/*.{html,ttf,png,jpeg,js,wasm,map,mp3}\" \"build\"",
+    "build:copy1": "copyfiles -e \"site/img/*\" -u 1 \"site/*.{html}\" \"site/**/*.{html,ttf,png,jpeg,js,wasm,map,mp3,webmanifest}\" \"build\"",
+    "build:copy2": "copyfiles -u 2 \"site/img/*.{html,ttf,png,jpeg,js,wasm,map,mp3,webmanifest}\" \"build\"",
     "build:copy": "npm run build:copy1 && npm run build:copy2",
     "build": "npm run build:copy && npm run build:css",
     "start": "serve ./build",
@@ -27,7 +27,7 @@
       "patterns": [
         "site"
       ],
-      "extensions": "html,js,ttf,jpg,png,wasm,map,mp3"
+      "extensions": "html,js,ttf,jpg,png,wasm,map,mp3,webmanifest"
     }
   },
   "dependencies": {}

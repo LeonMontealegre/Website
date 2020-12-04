@@ -2,26 +2,26 @@
 <html>
     <head>
         <!-- Primary Meta Tags -->
-        <title>Leon Montealegre | Personal Website – About</title>
+        <title>Leon Montealegre | Personal Website – Projects: Double Pendulum</title>
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-        <meta name="title" content="Leon Montealegre | Personal Website – About">
-        <meta name="description" content="Personal website and online portfolio for Leon Montealegre">
+        <meta name="title" content="Leon Montealegre | Personal Website – Projects: Double Pendulum">
+        <meta name="description" content="Double pendulum simulation. Personal website and online portfolio for Leon Montealegre">
         <meta name="keywords" content="leon,montealegre,leonmontealegre,personal,website,portfolio,resume,job,internship,computer,science,cs,blog,animations,models,projects,cool,interactive,creative">
 
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website">
         <meta property="og:url" content="http://www.leonmontealeg.re/">
-        <meta property="og:title" content="Leon Montealegre | Personal Website – About">
-        <meta property="og:description" content="Personal website and online portfolio for Leon Montealegre">
+        <meta property="og:title" content="Leon Montealegre | Personal Website – Projects: Double Pendulum">
+        <meta property="og:description" content="Double pendulum simulation. Personal website and online portfolio for Leon Montealegre">
         <meta property="og:image" content="">
 
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
         <meta property="twitter:url" content="http://www.leonmontealeg.re/">
-        <meta property="twitter:title" content="Leon Montealegre | Personal Website – About">
-        <meta property="twitter:description" content="Personal website and online portfolio for Leon Montealegre">
+        <meta property="twitter:title" content="Leon Montealegre | Personal Website – Projects: Double Pendulum">
+        <meta property="twitter:description" content="Double pendulum simulation. Personal website and online portfolio for Leon Montealegre">
         <meta property="twitter:image" content="">
 
         <meta name="msapplication-TileColor" content="#da532c">
@@ -33,7 +33,7 @@
         <link rel="manifest" href="/site.webmanifest">
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
-        <link rel="stylesheet" href="/about/style.css">
+        <link rel="stylesheet" href="/projects/DoublePendulum/style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -41,19 +41,24 @@
     <body>
         <div class="page-wrap">
             <header class="header">
-                <div class="header-line-2"></div>
-                <div class="header-circle header-circle-2"><p>Back</p></div>
+                <div class="header-line-4"></div>
+                <div class="header-circle header-circle-4"><p>Back</p></div>
             </header>
 
-            <div class="content">
-                <div id="about">
-                    My name is <span class="text-info">Leon Montealegre</span> and I am a
-                    <span class="text-success">Computer Science</span> +
-                    <span class="text-warning">Applied Mathematics</span> +
-                    <span class="text-danger">Physics</span> undergraduate
-                    at <span class="text-secondary">Rensselaer Polytechnic Institute of Technology</span>.
+            <main class="content" role="main">
+                <img alt="Double Pendulum thumbnail"
+                     src="/projects/DoublePendulum/index.png">
+                <h1>Double Pendulum</h1>
+                <div class="main-text">
+                    <p>A simple simulation of a double pendulum using my own Physics library</p>
+                    <p>All computation is done using RK4 entirely using WebAssembly!</p>
+                    <p>The governing equations of a double pendulum are as follows:</p>
+                    <img alt="Double Pendulum Equations" src="/projects/DoublePendulum/equations.png">
                 </div>
-            </div>
+                <div class="bottom">
+                    <a type="button" href="/projects/DoublePendulum/app/" target="_blank">Go to simulation</a>
+                </div>
+            </main>
 
             <footer class="footer">
                 <div class="footer-left">
