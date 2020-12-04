@@ -1,3 +1,138 @@
-@import "node_modules/bootstrap/scss/bootstrap";
-
 @import "site/css/shared", "site/css/colors", "site/css/header", "site/css/footer";
+
+.content {
+    $card-width: 350px;
+    $card-thumb-height: 225px;
+    $card-body-height: 235px;
+    $card-height: $card-thumb-height + $card-body-height;
+
+    padding: 2rem;
+
+    & > ul {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(#{$card-width}, 1fr));
+        grid-gap: 1rem;
+
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+
+        & > li {
+            display: flex;
+            justify-content: center;
+
+            width: 100%;
+
+            & > .card {
+                width: $card-width;
+                height: $card-height;
+
+                border: 2px solid gray;
+                border-radius: 5px;
+
+                background-color: white;
+
+                & > .card-img-top {
+                    display: block;
+
+                    width: 100%;
+                    height: $card-thumb-height;
+
+                    object-fit: cover;
+
+                    border-bottom: 2px solid gray;
+                }
+                & > .card-body {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+
+                    height: calc(#{$card-body-height} - 2.5rem);
+
+                    padding: 1.25rem;
+
+                    color: black;
+
+                    & > h3 {
+                        width: 100%;
+
+                        font-size: 1.75rem;
+                        font-weight: 500;
+
+                        margin-top: 0;
+                        margin-bottom: 0.5rem;
+
+                        line-height: 1.2;
+
+                        & > strong {
+                            font-weight: bolder;
+                        }
+                    }
+                    & > .card-text {
+                        width: 100%;
+
+                        margin-top: 0;
+                        margin-bottom: 1rem;
+                    }
+                    & > .card-footer {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                        align-items: center;
+
+                        width: 100%;
+
+                        align-self: flex-end;
+
+                        & > .card-footer-btns {
+                            display: inline-flex;
+                            vertical-align: middle;
+
+                            & > a {
+                                font-weight: 400;
+                                font-size: 0.875rem;
+                                line-height: 1.5rem;
+                                text-decoration: none;
+
+                                padding: 0.25rem 0.5rem;
+                                border: 1px solid gray;
+
+                                color: gray;
+
+                                cursor: pointer;
+
+                                user-select: none;
+
+                                transition: color 0.15s ease-in-out,
+                                            background-color 0.15s ease-in-out;
+
+                                &:first-child {
+                                    border-top-left-radius: 0.2rem;
+                                    border-bottom-left-radius: 0.2rem;
+                                }
+                                &:last-child {
+                                    border-top-right-radius: 0.2rem;
+                                    border-bottom-right-radius: 0.2rem;
+
+                                    margin-left: -1px;
+                                }
+
+                                &:hover {
+                                    color: white;
+                                    background-color: gray;
+                                }
+                            }
+                        }
+
+                        & > small {
+                            color: gray;
+
+                            font-size: 80%;
+                            font-weight: 400;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
