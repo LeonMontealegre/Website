@@ -3,10 +3,21 @@
 $("[class*=circle]").on("click", function() {
     // $(this).addClass("grow-over");
     // setTimeout(() => {
-    let text = $(this).children().text().toLowerCase();
-    if (text == "home" || text == "back")
-        text = "";
-    window.location.href = `/${text}`;
+    const text = $(this).children().text().toLowerCase();
+
+    let path;
+    if (text == "home") {
+        path = "/";
+    } else if (text == "back") {
+        const paths = window.location.pathname.split("/");
+        if (paths.length > 0)
+            paths.pop();
+        path = paths.join("/");
+    } else {
+        path = `/${text}`;
+    }
+
+    window.location.pathname = `${path}`;
     // }, 1800);
 });
 

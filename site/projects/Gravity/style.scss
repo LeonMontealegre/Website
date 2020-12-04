@@ -1,16 +1,2 @@
-@import "node_modules/bootstrap/scss/bootstrap";
-
-@import "site/css/shared", "site/css/colors", "site/css/header";
-
-// body, html {
-//     background-color: nth($colors, 2);
-// }
-
-#about {
-    color: #333;
-    font-size: 60px;
-}
-
-.planet-header-line {
-    border-color: transparentize(nth($colors, 2), 0.2);
-}
+@import "site/css/shared", "site/css/colors", "site/css/header", "site/css/footer",
+        "site/projects/css/shared";
