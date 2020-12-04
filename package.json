@@ -30,7 +30,5 @@
       "extensions": "html,js,ttf,jpg,png,wasm,map,mp3"
     }
   },
-  "dependencies": {
-    "bootstrap": "^4.4.1"
-  }
+  "dependencies": {}
 }
