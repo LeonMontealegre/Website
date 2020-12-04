@@ -74,7 +74,7 @@ footer {
 }
 
 
-@each $i,$radius,$r,$theta,$f-size in $circles2 {
+@each $i,$radius,$r,$theta,$f-size in $circles {
     .circle-#{$i} {
         position: absolute;
 
@@ -100,7 +100,7 @@ footer {
 
         & p {
             margin: 0;
-            font-size: $f-size;
+            font-size: $f-size * 1vh;
         }
         &:hover {
             transform: scale($circle-expand);
@@ -114,6 +114,10 @@ footer {
             left: ($r * cos($theta * 1deg) + $sun-x - $radius) * 1vw;
 
             line-height: 2vw*$radius;
+
+            & p {
+                font-size: $f-size * 1vw;
+            }
 
             $shadow-dist: $radius * 1.414vw / 10;
             box-shadow: $shadow-dist*cos($shadow-angle) $shadow-dist*sin($shadow-angle) 0px 0px darken(nth($colors, $i), 20%);
@@ -131,6 +135,10 @@ footer {
             left: calc((#{$r} * var(--cos) + #{$sun-x - $radius}) * 4/5 * var(--h-unit));
 
             line-height: calc(#{4/5 * 2 * $radius} * var(--h-unit));
+
+            & p {
+                font-size: $f-size * 4/5 * 1vh;
+            }
 
             $shadow-dist: $radius * 4/5 * 1.414 / 10;
 
