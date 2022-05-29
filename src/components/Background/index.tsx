@@ -5,35 +5,57 @@ import {useMemo} from "react";
 import styles from "./index.module.scss";
 
 
-const NUM_STARS = 200;
+const NUM_STARS = 100;
 const NUM_SHOOTING_STARS = 4;
 
-const GenRandomStar = (i: number) => ({
-    cx: Math.random()*100,
-    cy: Math.random()*100,
-    tx: undefined as number | undefined,
-    ty: undefined as number | undefined,
-    r: (Math.random() + 1),
-    delay:       (i*100 +  500 * Math.random()),
-    duration:    (3000  + 4000 * Math.random()),
-    glowDuration: 1000,
-    brightness:  (0.7   +  0.3 * Math.random()),
-});
-const GenRandomShootingStar = (i: number) => {
-    const star = GenRandomStar(i);
+type StarProps = {
+    c: { x: number, y: number };
+    r: number;
+    brightness: number;
+} & ({
+    isShooting: false;
+} | {
+    isShooting: true;
+    t: { x: number, y: number };
+    delay: number;
+    duration: number;
+})
+const Star = ({ c, r, brightness, ...other }: StarProps) => (
+    <circle
+        className={other.isShooting ? styles["shooting__star"] : styles["star"]}
+        fill="white"
+        cx={`${c.x}%`} cy={`${c.y}%`} r={r} transform-origin={`${c.x}% ${c.y}%`}
+        opacity={brightness}
+        style={(other.isShooting ? {
+            "--star-target-dx": `${other.t.x}%`,
+            "--star-target-dy": `${other.t.y}%`,
+            "--star-animation-delay": `${other.delay}ms`,
+            "--star-animation-duration": `${other.duration}ms`,
+            "--star-animation-glow-duration": `${other.duration}ms`,
+            "--star-brightness": brightness,
+        } : {}) as React.CSSProperties} />
+)
+
+const GenRandomStar = (i: number, isShooting = false): StarProps => {
+    const star = {
+        c: { x: Math.random()*100, y: Math.random()*100 },
+        r: (Math.random() + 1),
+        brightness: (0.7 + 0.3 * Math.random()),
+    };
+    if (!isShooting)
+        return { isShooting, ...star };
     return {
+        isShooting,
         ...star,
-        tx: Math.random()*100 - star.cx,
-        ty: Math.random()*100 - star.cy,
-        delay: star.delay * 10,
-        glowDuration: star.duration,
-    }
+        t: { x: (Math.random()*100 - star.c.x), y: (Math.random()*100 - star.c.y) },
+        delay: (i*1000 + 5000 * Math.random()),
+        duration: 3000 + 4000 * Math.random(),
+    };
 }
 
-const stars = [
-    ...Array(NUM_STARS).fill(0).map((_, i) => (GenRandomStar(i))),
-    ...Array(NUM_SHOOTING_STARS).fill(0).map((_, i) => (GenRandomShootingStar(i)))
-];
+const stars = Array(NUM_STARS).fill(0).map((_, i) => (GenRandomStar(i)));
+const shootingStars = Array(NUM_SHOOTING_STARS).fill(0).map((_, i) => (GenRandomStar(i, true)));
+
 
 export const Background = () => {
     const [showStars, setShowStars] = useState(false);
@@ -44,23 +66,10 @@ export const Background = () => {
     }, []);
 
     return useMemo(() => (
-        <svg className={styles["background"]} preserveAspectRatio="xMinYMin slice">
-            {showStars &&
-             stars.map(({ cx, cy, tx, ty, r, delay, duration, glowDuration, brightness }, i) => (
-                <circle
-                    key={`star-${i}`}
-                    className={tx ? styles["shooting__star"] : styles["star"]}
-                    fill="white"
-                    cx={`${cx}%`} cy={`${cy}%`} r={r} transform-origin={`${cx}% ${cy}%`}
-                    style={{
-                        "--star-target-dx": `${tx}%`,
-                        "--star-target-dy": `${ty}%`,
-                        "--star-animation-delay": `${delay}ms`,
-                        "--star-animation-duration": `${duration}ms`,
-                        "--star-animation-glow-duration": `${glowDuration}ms`,
-                        "--star-brightness": brightness,
-                    } as React.CSSProperties} />
-            ))}
-        </svg>
+        <div className={styles["background"]}>
+            <svg>{showStars &&         stars.map((star, i) => <Star key={`star-${i}`} {...star} />)}</svg>
+            <div className={styles["twinkling"]}></div>
+            <svg>{showStars && shootingStars.map((star, i) => <Star key={`star-${i}`} {...star} />)}</svg>
+        </div>
     ), [showStars]);
 }

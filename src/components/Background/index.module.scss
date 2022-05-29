@@ -1,33 +1,34 @@
 
+
 .background {
     position: fixed;
 
     width: 100%;
     height: 100%;
 
-    left: 0;
-    top: 0;
+    background-color: black;
+
+    z-index: -3;
+
+    & > * {
+        position: absolute;
+
+        width: 100%;
+        height: 100%;
+    }
 }
 
-
-.star {
-    @keyframes pulseAnimation {
-        0%   { transform: scale(1) }
-        30%  { transform: scale(1.2); }
-        70%  { transform: scale(0.2); }
-        100% { transform: scale(1) }
-    }
-    @keyframes glowingAnimation {
-        0%   { opacity: var(--star-brightness, 1); }
-        100% { opacity: calc(var(--star-brightness, 1) * 0.5); }
+.twinkling {
+    @keyframes moveBack {
+        from { background-position: 0 0; }
+        to {   background-position: -10000px 5000px; }
     }
 
-    animation:
-	    pulseAnimation var(--star-animation-duration, 3000ms) infinite backwards,
-	    glowingAnimation var(--star-animation-glow-duration, 5000ms) infinite alternate backwards;
+    background: transparent url("/img/twinkling.png") repeat top center;
 
-    animation-delay: var(--star-animation-delay, 0);
+    animation: moveBack 800s linear infinite;
 }
+
 .shooting__star {
     @keyframes shootingStarAnimation {
         0% { transform: translate(0, 0); opacity: 0; }

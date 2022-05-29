@@ -5,7 +5,9 @@
 body, html {
     font-family: Walkway;
 
-    background-color: #000;
+    z-index: -10;
+
+    background-color: transparent;
     color: #fff;
 
     line-height: 1.5;
