@@ -29,7 +29,7 @@
         $icon-pos: $size/2 - $icon-size/2;
 
         @media screen and (max-width: 600px) {
-            display: none;
+            display: none !important;
         }
 
         & > a {
