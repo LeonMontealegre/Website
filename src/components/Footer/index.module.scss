@@ -24,82 +24,82 @@
         }
     }
     &-icons {
+        $size: 30px;
+        $icon-size: $size*0.6;
+        $icon-pos: $size/2 - $icon-size/2;
+
         @media screen and (max-width: 600px) {
             display: none;
         }
-    }
-}
 
-.fa {
-    $size: 30px;
-    $icon-size: $size*0.6;
-    $icon-pos: $size/2 - $icon-size/2;
+        & > a {
+            width: $size;
+            height: $size;
 
-    width: $size;
-    height: $size;
+            color: white;
 
-    color: white;
+            vertical-align: middle;
 
-    vertical-align: middle;
+            margin-left: 5px;
+            margin-right: 5px;
 
-    margin-left: 5px;
-    margin-right: 5px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 50%;
 
-    text-align: center;
-    text-decoration: none;
-    border-radius: 50%;
+            &:hover {
+                opacity: 0.7;
+            }
 
-    &:hover {
-        opacity: 0.7;
-    }
+            &::before {
+                content: "";
 
-    &::before {
-        content: "";
+                display: inline-block;
 
-        display: inline-block;
+                width: $size;
+                height: $size;
 
-        width: $size;
-        height: $size;
-
-        background-size: $icon-size $icon-size;
-        background-repeat: no-repeat;
-        background-position: $icon-pos $icon-pos;
-    }
-
-    &-twitter {
-        background: #55ACEE;
-        &::before {
-            background-image: url("/img/icons/twitter.svg");
+                background-size: $icon-size $icon-size;
+                background-repeat: no-repeat;
+                background-position: $icon-pos $icon-pos;
+            }
         }
-    }
-    &-linkedin {
-        background: #007bb5;
-        &::before {
-            background-image: url("/img/icons/linkedin.svg");
 
-            // Adjust slightly for Linkedin SVG
-            background-position: ($icon-pos) ($icon-pos - 1px);
+        &-twitter {
+            background: #55ACEE;
+            &::before {
+                background-image: url("/img/icons/twitter.svg");
+            }
         }
-    }
-    &-youtube {
-        background: #bb0000;
-        &::before {
-            background-image: url("/img/icons/youtube.svg");
+        &-linkedin {
+            background: #007bb5;
+            &::before {
+                background-image: url("/img/icons/linkedin.svg");
 
-            // Adjust slightly for YouTube SVG
-            background-position: ($icon-pos - 1px) ($icon-pos);
+                // Adjust slightly for Linkedin SVG
+                background-position: ($icon-pos) ($icon-pos - 1px);
+            }
         }
-    }
-    &-instagram {
-        background: #125688;
-        &::before {
-            background-image: url("/img/icons/instagram.svg");
+        &-youtube {
+            background: #bb0000;
+            &::before {
+                background-image: url("/img/icons/youtube.svg");
+
+                // Adjust slightly for YouTube SVG
+                background-position: ($icon-pos - 1px) ($icon-pos);
+            }
         }
-    }
-    &-github {
-        background: #373737;
-        &::before {
-            background-image: url("/img/icons/github.svg");
+        &-instagram {
+            background: #125688;
+            &::before {
+                background-image: url("/img/icons/instagram.svg");
+            }
+        }
+        &-github {
+            background: #373737;
+            &::before {
+                background-image: url("/img/icons/github.svg");
+            }
         }
     }
 }
