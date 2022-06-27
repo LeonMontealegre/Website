@@ -10,12 +10,16 @@
   },
   "dependencies": {
     "@next/mdx": "^12.1.6",
+    "desmos": "^1.5.4",
     "next": "12.1.6",
     "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react-dom": "18.1.0",
+    "rehype-katex": "^6.0.2",
+    "remark-math": "^5.1.1"
   },
   "devDependencies": {
     "@mdx-js/loader": "^2.1.1",
+    "@types/desmos": "^1.6.0",
     "@types/node": "17.0.36",
     "@types/react": "18.0.9",
     "@types/react-dom": "18.0.5",

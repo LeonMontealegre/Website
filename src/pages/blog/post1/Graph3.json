@@ -1,0 +1,123 @@
+{
+    "version": 9,
+    "randomSeed": "1444ba1e27fc41e359617792a16a3409",
+    "graph": {
+        "viewport": {
+            "xmin": -0.08912118078828322,
+            "ymin": -1.365129172537706,
+            "xmax": 2.0334353360741892,
+            "ymax": 0.625308263425877
+        },
+        "userLockedViewport": true
+    },
+    "expressions": {
+        "list": [
+            {
+                "type": "expression",
+                "id": "1",
+                "color": "#c74440",
+                "latex": "f\\left(x\\right)=x^{5}-3x^{3}+x^{2}"
+            },
+            {
+                "type": "expression",
+                "id": "3",
+                "color": "#388c46",
+                "latex": "x_{x}=0.454",
+                "slider": {
+                    "hardMin": true,
+                    "hardMax": true,
+                    "min": "0",
+                    "max": "1.5321"
+                }
+            },
+            {
+                "type": "expression",
+                "id": "8",
+                "color": "#388c46",
+                "latex": "h=0.24",
+                "slider": {
+                    "hardMin": true,
+                    "hardMax": true,
+                    "min": "0.06",
+                    "max": "1.5321-x_{x}"
+                }
+            },
+            {
+                "type": "expression",
+                "id": "25",
+                "color": "#000000"
+            },
+            {
+                "type": "expression",
+                "id": "9",
+                "color": "#6042a6",
+                "latex": "\\left(x_{x},\\ f\\left(x_{x}\\right)\\right)"
+            },
+            {
+                "type": "expression",
+                "id": "16",
+                "color": "#c74440",
+                "latex": "\\left(x_{x}+h,\\ f\\left(x_{x}+h\\right)\\right)"
+            },
+            {
+                "type": "expression",
+                "id": "10",
+                "color": "#000000"
+            },
+            {
+                "type": "expression",
+                "id": "15",
+                "color": "#388c46",
+                "latex": "y=\\frac{f\\left(x_{x}+h\\right)-f\\left(x_{x}\\right)}{h}\\left(x-x_{x}\\right)+f\\left(x_{x}\\right)\\left\\{x_{x}\\le x\\le x_{x}+h\\right\\}",
+                "lineWidth": "5"
+            },
+            {
+                "type": "expression",
+                "id": "17",
+                "color": "#2d70b3"
+            },
+            {
+                "type": "expression",
+                "id": "18",
+                "color": "#388c46",
+                "latex": "y_{top}=\\max\\left(f\\left(x_{x}\\right),\\ f\\left(x_{x}+h\\right)\\right)+0.1",
+                "labelSize": "medium"
+            },
+            {
+                "type": "expression",
+                "id": "19",
+                "color": "#000000",
+                "latex": "y=y_{top}\\ \\left\\{x_{x}\\le x\\le x_{x}+h\\right\\}",
+                "lineWidth": "4"
+            },
+            {
+                "type": "expression",
+                "id": "20",
+                "color": "#000000",
+                "latex": "x=x_{x}\\ \\left\\{f\\left(x_{x}\\right)+0.05\\le y\\le y_{top}+0.02\\right\\}"
+            },
+            {
+                "type": "expression",
+                "id": "22",
+                "color": "#000000",
+                "latex": "x=x_{x}+h\\ \\left\\{f\\left(x\\right)+0.05\\le y\\le y_{top}+0.02\\right\\}"
+            },
+            {
+                "type": "expression",
+                "id": "23",
+                "color": "#388c46"
+            },
+            {
+                "type": "expression",
+                "id": "24",
+                "color": "#000000",
+                "latex": "\\left(x_{x}+\\frac{h}{2},\\ y_{top}\\right)",
+                "showLabel": true,
+                "label": "h",
+                "hidden": true,
+                "labelSize": "2",
+                "labelOrientation": "above"
+            }
+        ]
+    }
+}

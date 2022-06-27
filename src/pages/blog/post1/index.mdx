@@ -1,2 +1,321 @@
+import Image from "next/image";
+import dynamic from "next/dynamic";
 
-# Test
+import {useEffect, useRef, useState} from "react";
+
+export const Graph1 = dynamic((() => import("./Graph1")), { ssr: false });
+export const Graph2 = dynamic((() => import("./Graph2")), { ssr: false });
+
+import {BlogLayout} from "components/layouts/BlogLayout";
+
+
+# Intro to Finite Difference Methods
+
+## Q: What is a finite difference method?
+
+Finite difference methods are a set of numerical methods used to solve Partial Differential Equations in mathematical
+physics. The technique involves approximating each derivative term in the differential equation with finite differences.
+This is done by discretizing the spatial and temporal domains by breaking them into discrete steps and thus allowing the
+schemes to act point-wise across them.
+
+Okay, that was a lot of words so let's break it down. We can start with one of the simplest differential equations, the
+*Advection Equation*:
+
+## Advection Equation Intro
+
+The advection equation is a very simple differential equation that represents the movement of information/material.
+Mathematically, its simplest form is often represented as:
+$$
+u_t = -a u_x
+$$
+And is called the linear scalar advection equation.
+
+$u$ represents the variable of interest, i.e. the *thing* that will transport/move, (ex. temperature for heat transfer).
+
+I choose to use subscript notation to represent my derivatives, so $u_t$ represents the derivative of $u$ with respect
+to time, $t$ and $u_x$ represents the derivative of $u$ with respect to the space, $x$.
+
+Finally, $a$ represents the speed that $u$ moves throughout the domain.
+
+The Advection equation has an exact solution:
+$$
+u(x,t) = u_0(x - at)
+$$
+
+<Graph1 />
+
+where $u_0$ represents the initial function, often called an "initial condition" which will be detailed later, but in
+this case, is the green curve at $t = 0$. But with this exact solution, we can see that as $t$ increases, the function
+$u_0$ is simply translated to the right (or to the left for $a < 0$).
+<details>
+    <summary>Click for more explanation</summary>
+
+
+    What this equation simply states, is that the speed of the material, $u_t$, is proportional to the difference of
+    material in space. I.e. that regions with higher slope gain/lose material faster then regions with lower slope.
+
+    Here is a deeper demonstration of why this equation results in a
+    translation since it may seem confusing or counter-intuitive (note this assumes $a > 0$):
+
+    <Graph2 />
+</details>
+
+<br />
+
+## A simple finite difference method
+
+The whole basis behind finite difference methods is the idea of approximating a derivative.
+
+We know from the beginnings of calculus, that the derivative can be formed in many ways, but the simplest and most
+common is the form of:
+$$
+f_x = f_x(x) = \frac{df(x)}{dx} = \lim_{h\rightarrow 0}\frac{f(x+h) - f(x)}{h}
+$$
+
+<details>
+    <summary>Click for more explanation</summary>
+
+    If you have not seen this idea before (or it's been awhile), it's very essentially just an approximation of the slope
+    at a certain point ($x$), by taking the simple "rise over run", where at the point $x$, you move over $h$ (the run), and
+    find the value at that point ($f(x+h)$), and calculate the "rise" as $f(x + h) - f(x)$, since that is how much the value
+    "rises" $h$ units away. And as you take $h$ smaller and smaller, it becomes a better and better approximation of the
+    slope at $x$, see the graph below:
+    (GRAPH TODO: https://www.desmos.com/calculator/wcqg7fhcud)
+
+</details>
+
+This method of going "forward" by $h$, is the so-called **"Forward Euler"** approximation to the derivative.
+
+The biggest take-away from this approximation is the fact that as $h$ decreases, you get a better and better
+approximation to the slope at $x$.
+
+This is the core foundation of Finite Difference methods. Essentially, we want to turn each derivative term in the
+differential equation to an approximation instead. To do this, we first need to realize that this approximation acts
+*point-wise*, meaning at each point, $x$, we can apply this approximation in the differential equation.
+
+Since we have two variables to differentiate ($x$ and $t$), which will each have an approximation with different $h$
+values, we will instead use $h = \Delta x$ for the $x$ derivative and $h = \Delta t$ for the $t$ derivative.
+
+This means that, we get:
+<details>
+    <summary>Click for full steps</summary>
+
+$$
+u_t = -au_x \\
+\Rightarrow u_t(x,t) = -a u_x(x,t) \\
+\Rightarrow \frac{\partial u(x,t)}{\partial t} = -a \frac{\partial u(x,t)}{\partial x} \\
+$$
+
+</details>
+$$
+\lim_{\Delta t\rightarrow 0}\frac{u(x,t+\Delta t) - u(x,t)}{\Delta t} = -a\lim_{\Delta x\rightarrow 0}\frac{u(x+\Delta x, t) - u(x,t)}{\Delta x}\ \ \  {\Large\forall} x, t
+$$
+
+The next big realization is that we are working in "finite"-land, and thus the idea of an exact limit or applying the
+function to all possible values of $x$ and $t$ is impossible (because digital computers cannot work with infinites or
+perfectly continuous values). Thus the best we can do is approximate!
+
+The approximation process is two-fold:
+1. Approximation of the derivative itself.
+2. Approximation/Discretization of the domain.
+
+For #1, we already *have* an approximation, we simply remove the limit and suddenly we have an approximation to the
+derivative! And we also know that this derivative becomes more accurate as we decrease the value of $h$! (This is a very
+important property called "consistency").
+
+For #2, this process is simply choosing a finite subset of the domain $x,t$ to sample upon. This subset we will call
+$x_j$ which samples $N+1$ points from $j = 0,\dots,N$ in the $x$ domain and $t_n$ which samples $M+1$ points from
+$n = 0,\dots,M$ in time. Note, we will also assume that $x_0 < x_1 < \cdots < x_{N-1} < x_N$ (i.e. that the points are
+ordered from left to right as $j$ increases).
+
+This leads to the following form:
+$$
+\frac{u(x_j, t_n + \Delta t_n) - u(x_j, t_n)}{\Delta t_n} = -a\frac{u(x_j + \Delta x_j, t_n) - u(x_j, t_n)}{\Delta x_j}\ \ \ {\Large\forall} j,n
+$$
+
+Note that we also define $\Delta x_j = x_{j+1} - x_j$, i.e. the space between the current point and the next point.
+Similarly, we define $\Delta t_n = t_{n+1} - t_n$.
+
+This means that $x_{j+1} = x_j + \Delta x_j$ and $t_{n+1} = t_n + \Delta t_n$, and we can get that:
+$$
+\frac{u(x_j, t_{n+1}) - u(x_j, t_n)}{\Delta t_n} = -a\frac{u(x_{j+1}, t_n) - u(x_j, t_n)}{\Delta x_j}\ \ \ {\Large\forall} j,n
+$$
+
+Finally, I'm going to introduce one last notational simplification which is $u_j^n = u(x_j, t_n)$ which helps simplify
+the form to:
+$$
+\frac{u_j^{n+1} - u_j^n}{\Delta t_n} = -a\frac{u_{j+1}^n - u_j^n}{\Delta x_j}\ \ \ {\Large\forall} j \in [0,N], n \in [0,M]
+$$
+
+And this is our final formulation! This would be a "Forward Euler" approximation to the Advection Equation.
+
+<br />
+
+### Boundary and Initial Conditions
+
+Boundary and initial conditions are set of constraints (or conditions) that make any solution to a differential equation
+well-posed and unique. They are esssential to the equation and have a very intuitive meaning. Since differential
+equations exist to model *something* (flow of heat, vibration of a string, electrical current, motion of planets), we
+need a way to "*tell*" the equation the specifics of what we're modeling. I.e. for planet motions: we need to "*tell*"
+the equation which planets we are trying to model since the equation is generic for any set of planets. Or for heat
+conduction, we need to, again, "*tell*" the equation that we're dealing with the heat through a pipe at a certain
+temperature, or a house with a paricular ventalition system, etc. The sort-of "geometric" constraints (i.e. the shape of
+a certain pipe for heat flow or a house) would be addressed through the "Boundary Conditions", while the "starting
+point" for the modeling (i.e. the planets start at a certain position in space, or the pipe starts at a certain
+temperature that's really hot on one end and cool on the other) are set through the "Initial Conditions".
+
+<details>
+    <summary>Click for more detailed examples</summary>
+
+    A more specific example is the heat-flow through a rectangular house, imagine the following conditions:
+
+    ![Heat thorugh a House!](/img/blog/post1/heat_bcs.png)
+
+    There's the heat from the sun going into the house from the left, open windows on the top letting heat out at a
+    certain rate, and an air conditioner on the bottom blowing cool air into the house. There's also the natural rate of
+    heat flow from the walls themselves which are (hopefully) insulated, but still allow heat to enter at a certain rate
+    depending on the heat outside. All of these are specified through boundary conditions.
+
+    Another example (this time of initial conditions) is of planets:
+
+    ![Planet Initial Conditions!](/img/blog/post1/planet_ics.png)
+
+    If, at this very moment in time, astronomers gave out all the data for the exact positions/velocities of certain
+    planets, and we wanted to simulate their interactions so we could predict their future positions/velocities, we
+    could do that! And in-fact, this is a very common reason for simulation of planets. But note the important part of
+    this, that we need to *start* somewhere. We have the data for the planets *now*, so we would like to start the
+    modeling *now*. These are specified through the initial conditions.
+
+</details>
+
+For our purposes with the Advection equation, we already saw that the exact solution depends fully on this initial
+condition, which dictates the initial curve that moves through space. The trickier aspect is the boundary conditions.
+For simplicity, we will choose so-called "Periodic" boundary conditions. These simply state that what goes out to the
+right, come back in to the left. Essentially meaning that it will "wrap-around" periodically. To fully pose this problem
+we also need to specify what the domain actually is. For simplicity, we will say that $x \in [0, 1]$ and $t > 0$. This
+means that when the information reaches $x = 1$, it'll go back around to $x = 0$.
+
+Mathematically, for the initial condition $u_0(x) = u(x, t=0)$, and periodic boundary conditions for $x \in [0, 1]$, we
+can write:
+$$
+u_j^0 = u_0(x_j),\ \ \forall j \in [0,N] \\
+u_0^n = u_N^n,\ \ \forall n \in [0,M]
+$$
+This forces us to assume that $x_0 = 0$ and $x_N = 1$.
+
+Note that since the initial condition applies for all $j$, and the boundary conditions apply for all $n$, there is a
+notion of the *compatibility* of the conditions. If we specified an initial condition where the value at $x = 0$ did not
+equal the value at $x=1$, we'd be violating this compatibility. This will be discussed further down the road and avoided
+for now, but it's still important to note.
+
+<br />
+
+### Implementation
+
+With our formulation of the equation and our initial and boundary conditions, we officially have everything ready to
+actually implement a numeric solver for the Advection equation! One last point needs to be explicitly made though, which
+is: what exactly are we *solving for*?
+
+The answer is actually fairly intuitive in this case. We know everything about the problem's starting conditions. This
+is specified through the initial condition. What we are then trying to find is the solution in the future! Since we have
+discretized time into finite steps $n = 0,1,\dots,M$, our goal is to take the information at $n = 0$ and find the
+solution at $n = 1$, and then use that to find $n = 2$, etc. all the way to $n = M$! In other words, we want to take the
+time solution at time $n$ and use that to find the time at $n+1$!
+
+So... how do we do this? Well, let's look back at our original formulation:
+$$
+\frac{u_j^{n+1} - u_j^n}{\Delta t_n} = -a\frac{u_{j+1}^n - u_j^n}{\Delta x_j}
+$$
+
+We can simply re-arrange this equation to solve for $u_j^{n+1}$:
+$$
+u_j^{n+1} = u_j^n - \frac{a\Delta t_n}{\Delta x_j}\left(u_{j+1}^n - u_j^n\right)
+$$
+
+And there we go! Everything on the RHS is information that we know for $n=0$, and then it gives us the solution at every
+point $x_j$ in space at time $n=1$, which can be used to find each point at $n=2$, and so on!
+
+This process is commonly called "stepping", as we take our modeling step-by-step through time.
+
+The last piece of this puzzle is the application of the boundary conditions. They must be true throughout all time, so
+we can simply apply them after stepping. I.e. once we calculate all the values at $n=1$, we can simply set
+$u_0^1 = u_N^1$ or vice-versa (Note it is actually very important which one we set, but that will be discussed later).
+
+For simplicity, we can assume that the spatial discretization (i.e. $x_j$) is uniform, meaning that $\Delta x_j = x_{j+1} - x_j$
+is constant, which we can just call $\Delta x$. Similarly, we can assume the same for $\Delta t$.
+
+This means that for all $N+1$ points from $j = 0$ to $j=N$ corresponding to $x = 0$ and $x = 1$, we can get that
+$\Delta x = \frac{1 - 0}{N - 0} = \frac{1}{N}$
+
+One last thing to note is that at the point $j=N$, the RHS uses $j+1 = N+1$ which isn't a valid point. This is actually
+part of a much larger topic of discussion that will be detailed further, but the easiest solution is to simply ignore
+the $j=N$ point and use that point to apply the boundary condition, by setting $u_N^n = u_0^n$.
+
+The implementation then simply looks something like:
+
+{/** TODO: syntax highlight */}
+```js
+function adv_eq(u0, a, N, M) {
+    xj = (0:N) / N;
+    dt = 1/M;
+    dx = 1/N;
+
+    u_n = u0(xj);
+    for (n = 0; n <= M; n++) {
+        for (j = 0; j < N; j++)
+            u_np1 = u_n - a*dt/dx * (u_n[j+1] - u[j])
+    }
+}
+```
+
+
+
+Overall TODO:
+1. current stuff
+    - finish implementation
+    - show it in action
+    - show cases where is explodes/fails
+    - attempt to explain this mathematically? stability analysis
+    - alternatively, do a sort-of "let's try something else" and see what happens before diving into analysis
+    - after analysis **is** eventually done: go into convergence orders
+    - use exact solution and find convergence order exactly
+    - remark of solving as a matrix system? (maybe save for later for implicit equations)
+2. new equation
+    - probably wave equation or heat equation. probably heat first.
+    - same procedure, turn into a FD expression
+    - set some BCs
+    - exact soln maybe? i forget how exact equation works with heat eqn
+    - implementation
+    - go into analysis again
+    - Repeat with wave equation? maybe. really want to emphasive the motivation behind things
+    - difference is requirement of two ICs
+3. higher-order methods
+    - show how to derive a higher-order method using taylor stuff
+    - apply to advection equation probably and show convergence order
+    - stability analysis? maybe?
+    - see NPDEs HW8
+4. implicit schemes
+    - more stability analysis
+    - matrix system solving even for explicit methods
+5. conservation laws / conservative schemes / shocks / dissipative schemes
+    - see NSWaves final project / NPDes final exam
+6. multi-equation systems / general time-solvers / RK-solvers
+    - gravity sim / pendulum sim
+7. parallel computation for sims (Parallel Computing final)?
+8. NWaves final paper / high-order conservative scheme / SWEs?
+
+
+Other TODOs:
+1. Better Desmos API wrapper
+2. syntax highlighting
+3. figure out better color palette? just white/black is hard to look at
+4. "Keyword" system which allows certain keywords to be hovered with a lil question-mark that gives the definition
+5. references to graphs/equations/etc
+6. better "more details" UI
+7. table of contents
+8. page-ination / better menu for navigating the content
+9. better way to show "more steps" for an equation
+
+
+
+export default ({ children }) => (<BlogLayout>{children}</BlogLayout>);

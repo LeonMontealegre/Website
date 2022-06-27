@@ -1,0 +1,21 @@
+finite differences:
+
+1. advection equation
+ a.     intro
+ b.i.   very simple first order discretization of equation
+ b.ii.  simple discretization of the domain
+ b.iii. simple BC/IC
+ c.     very simple implementation of the discretization
+
+2.
+
+
+
+
+
+
+
+
+DESMOS:
+
+Calc.getState() to get JSON

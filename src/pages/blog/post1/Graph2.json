@@ -1,0 +1,124 @@
+{
+    "version": 9,
+    "randomSeed": "29c1bad8fdc30e25d986bd53f2e7d776",
+    "graph": {
+        "viewport": {
+            "xmin": -0.2,
+            "ymin": -0.5,
+            "xmax": 2.2,
+            "ymax": 1.7
+        },
+        "userLockedViewport": true,
+        "squareAxes": false
+    },
+    "expressions": {
+        "list": [
+            {
+                "type": "expression",
+                "id": "a",
+                "color": "#388c46",
+                "latex": "a=1",
+                "hidden": true
+            },
+            {
+                "type": "expression",
+                "id": "gauss",
+                "color": "#000000",
+                "latex": "u_{gauss}\\left(x\\right)=e^{-10\\left(x\\right)^{2}}",
+                "hidden": true
+            },
+            {
+                "type": "expression",
+                "id": "sine",
+                "color": "#2d70b3",
+                "latex": "u_{sin}\\left(x\\right)=\\sin\\left(\\pi x\\right)",
+                "hidden": true
+            },
+            {
+                "type": "expression",
+                "id": "u0",
+                "color": "#c74440",
+                "latex": "u_{0}\\left(x\\right)=u_{gauss}\\left(x\\right)",
+                "hidden": true
+            },
+            {
+                "type": "expression",
+                "id": "u",
+                "color": "#2d70b3",
+                "latex": "u\\left(x,t\\right)=u_{0}\\left(x-at\\right)",
+                "labelSize": "medium"
+            },
+            {
+                "type": "expression",
+                "id": "ux",
+                "color": "#c74440",
+                "latex": "u_{x}\\left(x,t\\right)=\\frac{d}{dx}u\\left(x,t\\right)"
+            },
+            {
+                "type": "expression",
+                "id": "u_cur",
+                "color": "#388c46",
+                "latex": "u\\left(x,t_{t}\\right)",
+                "lineWidth": "4"
+            },
+            {
+                "type": "expression",
+                "id": "t",
+                "color": "#388c46",
+                "latex": "t_{t}=0",
+                "hidden": true,
+                "slider": {
+                    "hardMin": true,
+                    "hardMax": true,
+                    "loopMode": "LOOP_FORWARD",
+                    "min": "0",
+                    "max": "2"
+                }
+            },
+            {
+                "type": "expression",
+                "id": "x",
+                "color": "#388c46",
+                "latex": "x_{x}=0.5",
+                "slider": {
+                    "hardMin": true,
+                    "hardMax": true,
+                    "min": "-0.1",
+                    "max": "2.1"
+                }
+            },
+            {
+                "type": "expression",
+                "id": "y",
+                "color": "#6042a6",
+                "latex": "y_{y}=u\\left(x_{x},\\ t_{t}\\right)"
+            },
+            {
+                "type": "expression",
+                "id": "d",
+                "color": "#000000",
+                "latex": "d_{d}=-au_{x}\\left(x_{x},t_{t}\\right)"
+            },
+            {
+                "type": "expression",
+                "id": "x_arr",
+                "color": "#c74440",
+                "latex": "x=x_{x}\\ \\left\\{\\left|y-y_{y}\\right|\\le0.1\\right\\}"
+            },
+            {
+                "type": "expression",
+                "id": "y_arr",
+                "color": "#c74440",
+                "latex": "y=\\ y_{y}\\left\\{\\left|x-x_{x}\\right|\\le0.1\\right\\}"
+            },
+            {
+                "type": "expression",
+                "id": "label",
+                "color": "#c74440",
+                "latex": "\\left(x_{x},\\ y_{y}\\right)",
+                "showLabel": true,
+                "label": "SOME TEXT"
+            }
+        ]
+    }
+}

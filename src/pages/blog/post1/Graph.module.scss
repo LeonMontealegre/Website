@@ -1,0 +1,51 @@
+
+
+.paused {
+    &::after {
+        content: "";
+
+        position: absolute;
+
+        top: 0;
+        left: 0;
+        width: calc(100% + 2px);
+        height: calc(100% + 2px);
+
+        background-color: rgba(127, 127, 127, 0.7);
+    }
+
+    & > div::after {
+        $size: 64px;
+
+        content: "";
+
+        display: block;
+        position: absolute;
+
+        transition: transform 0.3s;
+
+        background-image: url("/img/icons/play.svg");
+        background-size: $size $size;
+
+        top: calc(50% - #{$size/2});
+        left: calc(50% - #{$size/2});
+        width: $size;
+        height: $size;
+
+        @keyframes scale {
+            from { transform: scale(1) }
+            to {   transform: scale(1.3) }
+        }
+
+        animation: scale 1s linear infinite alternate;
+    }
+
+    &:hover {
+        cursor: pointer;
+
+        & > div::after {
+            transform: scale(1.5);
+            animation: none;
+        }
+    }
+}
