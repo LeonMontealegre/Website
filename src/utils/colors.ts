@@ -1,5 +1,6 @@
 import {Clamp} from "./math";
 
+
 export type Color = {
     r: number;
     g: number;

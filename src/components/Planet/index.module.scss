@@ -1,0 +1,90 @@
+
+.planet {
+    will-change: transform;
+
+    position: absolute;
+
+    z-index: 1;
+
+    border-radius: 50%;
+
+    text-align: center;
+
+    transition: transform 0.5s;
+
+    transform: translate(-50%, -50%);
+
+    background-repeat: repeat;
+
+    pointer-events: all;
+
+    &:hover {
+        cursor: pointer;
+
+        transform: translate(-50%, -50%) scale(1.1);
+
+        & > p {
+            &::before {
+                animation-play-state: running;
+            }
+        }
+    }
+
+    & > p {
+        &::before {
+            @keyframes rotate {
+                0%   { transform: translate(-100px,    0); }
+                100% { transform: translate(   0, -200px); }
+            }
+
+            will-change: transform;
+
+            content: "";
+            display: block;
+            position: absolute;
+
+            left: 0;
+            top:  0;
+            width:  calc(100% + 100px);
+            height: calc(100% + 200px);
+
+            background: url("/img/noise.svg") repeat center center;
+            background-size: 100px 100px;
+
+            animation: rotate 2s linear infinite;
+            animation-play-state: paused;
+
+            opacity: 0.1;
+        }
+
+        position: relative;
+
+        z-index: 1;
+
+        overflow: hidden;
+
+        margin: 0;
+        border-radius: 50%;
+    }
+
+    &::before, &::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        border-radius: inherit;
+        background: inherit;
+    }
+    &::before {
+        filter: blur(15px);
+    }
+
+    // Make sun specifically "brighter"
+    &:nth-child(6) {
+        &::before {
+            filter: blur(40px);
+        }
+    }
+}
