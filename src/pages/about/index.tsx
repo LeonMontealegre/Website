@@ -25,7 +25,7 @@ const AboutPage: NextPage = () => {
                     </span> + <span className="text-danger">
                         Physics
                     </span> as an undergraduate and pursued
-                    a Master's in <span className="text-success">Computer Science</span> at
+                    a Masters in <span className="text-success">Computer Science</span> at
                     <span className="text-secondary"> Rensselaer Polytechnic Institute of Technology</span>.
                     <br /><br />
                     <p>My resume can be seen below</p>
@@ -37,6 +37,5 @@ const AboutPage: NextPage = () => {
         </PageLayout>
     );
 }
-
 
 export default AboutPage;
