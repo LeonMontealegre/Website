@@ -1,0 +1,41 @@
+
+
+.sidemenu {
+    position: fixed;
+
+    z-index: 4;
+
+    left: 0;
+    top: 0;
+
+    width: 200px;
+    height: 100vh;
+
+    // padding-top: 60px;
+
+    background-color: transparentize(#222, 0.2);
+
+    & > div:first-child {
+        height: 120px;
+        line-height: 120px;
+    }
+    & > div {
+        width: 100%;
+        height: 60px;
+        line-height: 60px;
+
+        // color: white;
+
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        vertical-align: middle;
+
+        &:hover {
+            cursor: pointer;
+
+            background-color: transparentize(#111, 0.5);
+        }
+    }
+}
+

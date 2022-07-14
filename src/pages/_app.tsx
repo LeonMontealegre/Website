@@ -1,4 +1,4 @@
-import type { AppProps } from "next/app";
+import type {AppProps} from "next/app";
 
 import {Background} from "components/Background";
 import {Footer} from "components/Footer";
@@ -17,6 +17,5 @@ function MyApp({ Component, pageProps }: AppProps) {
         </div>
     </>
 }
-
 
 export default MyApp;

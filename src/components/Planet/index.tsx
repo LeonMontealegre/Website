@@ -38,7 +38,7 @@ export const Planet = ({ w, h, planet }: Props) => {
                          ${angle + Math.PI/2}rad, \
                          ${shineColor} ${16 - 0.11*dist}%, \
                          ${color}      ${75 - 0.50*dist}%\
-                     `,
+                     )`,
 
                      // Box shadow halo around the planet
                      boxShadow: `0 0 ${shadowRadius}px ${shadowRadius}px ${borderColor}`,
