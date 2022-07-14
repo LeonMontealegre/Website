@@ -3,6 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import {useEffect, useMemo, useState} from "react";
+import {Brighten, ColorToHex, HexToColor} from "utils/colors";
 import {Clamp, FractionalNormalize, Lerp, Normalize, PolarToCartesian} from "utils/math";
 import {useWindowSize} from "utils/useWindowSize";
 
@@ -14,6 +15,8 @@ type CircleButton = {
     text: string;
     radius: number;
     color: string;
+    shineColor: string;
+    shadowRadius: number;
     pos: { // Polar
         r: number;
         a: number;
@@ -29,13 +32,18 @@ const RESIZE_END_AMT = 0.2;
 const RESIZE_SCALING_AMT = 0.7;
 
 const CIRCLES: CircleButton[] = [
-    { href: "/",           text: "Home",       radius: 10, color: "#cdad46", pos: { r:   0, a:  0 }, fontSize: 4   },
-    { href: "/about",      text: "About",      radius:  5, color: "#569cd6", pos: { r:  28, a: 45 }, fontSize: 2.5 },
-    { href: "/blog",       text: "Blog",       radius:  4, color: "#ce9178", pos: { r:  46, a: 60 }, fontSize: 2.3 },
-    { href: "/projects",   text: "Projects",   radius:  6, color: "#375772", pos: { r:  65, a: 80 }, fontSize: 2.8 },
+    { href: "/",           text: "Home",       radius: 10, color: "#f7ce48", pos: { r:   0, a:  0 }, fontSize: 4   },
+    { href: "/about",      text: "About",      radius:  5, color: "#375772", pos: { r:  28, a: 45 }, fontSize: 2.5 },
+    { href: "/blog",       text: "Blog",       radius:  4, color: "#a3715d", pos: { r:  46, a: 60 }, fontSize: 2.3 },
+    { href: "/projects",   text: "Projects",   radius:  6, color: "#873939", pos: { r:  65, a: 80 }, fontSize: 2.8 },
     { href: "/animations", text: "Animations", radius:  8, color: "#6a9955", pos: { r:  80, a: 20 }, fontSize: 3   },
-    { href: "/models",     text: "Models",     radius:  5, color: "#c586c0", pos: { r: 100, a: 45 }, fontSize: 2.2 },
-].map((c) => ({ ...c, pos: { r: c.pos.r, a: c.pos.a * Math.PI/180 } }));
+    { href: "/models",     text: "Models",     radius:  5, color: "#ae6ea9", pos: { r: 100, a: 45 }, fontSize: 2.2 },
+].map((c) => ({
+    ...c,
+    pos: { r: c.pos.r, a: c.pos.a * Math.PI/180 },
+    shineColor: ColorToHex(Brighten(HexToColor(c.color), 1.0)),
+    shadowRadius: (c.href === "/" ? 10 : 3),
+}));
 
 
 const Home: NextPage = () => {
@@ -85,14 +93,15 @@ const Home: NextPage = () => {
 
     return (
         <div className={styles["container"]}>
-            {curCircles.map(({ href, text, color, width, height, left, top, fontSize }) => (
+            {curCircles.map(({ href, text, color, shineColor, shadowRadius, width, height, left, top, fontSize }) => (
                 <Link key={text} href={href}>
                     <div className={styles["circle"]}
-                            style={{
-                            width: width, height, lineHeight: height,
-                            left, top,
-                            backgroundColor: color,
-                            }}>
+                         style={{
+                             width: width, height, lineHeight: height,
+                             left, top,
+                             backgroundColor: color,
+                             boxShadow: `0 0 ${shadowRadius}px ${shadowRadius}px ${shineColor}`,
+                         }}>
                         <p style={{ fontSize }}>{text}</p>
                     </div>
                 </Link>
