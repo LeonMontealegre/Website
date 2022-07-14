@@ -58,6 +58,13 @@ export function Lerp(t: number, start: number, end: number) {
 
 
 
-export function PolarToCartesian(r: number, a: number) {
-    return { x: r * Math.cos(a), y: r * Math.sin(a) };
+export function PolarToCartesian(r: number, a: number, o = { x: 0, y: 0 }) {
+    return [r * Math.cos(a) + o.x, r * Math.sin(a) + o.y] as const;
+}
+
+export function Rotate(x: number, y: number, a: number) {
+    return [
+        x * Math.cos(a) - y * Math.sin(a),
+        x * Math.sin(a) + y * Math.cos(a),
+    ] as const;
 }
