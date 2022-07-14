@@ -1,3 +1,4 @@
+import {Clamp} from "./math";
 
 export type Color = {
     r: number;
@@ -23,14 +24,26 @@ export function ColorToHex(col: Color) {
     }).join("")}`;
 }
 
-export function Brighten(col: Color, amt: number): Color {
+export function ClampColor({ r, g, b }: Color) {
+    return {
+        r: Clamp(r, 0, 255),
+        g: Clamp(g, 0, 255),
+        b: Clamp(b, 0, 255),
+    };
+}
+
+export function Brighten(col: Color, amt: number, useHSL = false): Color {
+    if (useHSL) {
+        const [h, s, l] = rgbToHsl(col);
+        return ClampColor(hslToRgb([ h, s, amt ]));
+    }
     const [h, s, v] = rgbToHsv(col);
-    return hsvToRgb([ h, s, amt ]);
+    return ClampColor(hsvToRgb([ h, s, amt ]));
 }
 
 
 // From https://gist.github.com/mjackson/5311256
-const { hslToRgb, hsvToRgb, rgbToHsl, rgbToHsv } = (() => {
+export const { hslToRgb, hsvToRgb, rgbToHsl, rgbToHsv } = (() => {
     const calcHue = ({ r, g, b }: Color) => {
         const max = Math.max(r, g, b), min = Math.min(r, g, b);
         const d = max - min;
