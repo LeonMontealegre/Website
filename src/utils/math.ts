@@ -6,42 +6,42 @@ export function Clamp(x: number, min: number, max: number) {
 /**
  * Linearly maps `x` in the domain [`min`, `max`] to [`newMin`, `newMax`]
  *
- * @param x The number to map
- * @param min The lower bound of `x`
- * @param max The upper bound of `x`
- * @param newMin The new lower bound
- * @param newMax The new upper bound
- * @returns A remapped version of `x` between `newMin` and `newMax`
+ * @param x        The number to map
+ * @param start    The "start" value of `x`, i.e. what mapped `newStart` corresponds to
+ * @param end      The "end" value of `x`, i.e. what mapped `newEnd` corresponds to
+ * @param newStart The new "start" value of the mapped value, i.e. what `start` corresponds to
+ * @param newEnd   The new "end" value of the mapped value, i.e. what `end` corresponds to
+ * @returns        A remapped version of `x` between `newStart` and `newMax`
  */
-export function Remap(x: number, min: number, max: number, newMin: number, newMax: number) {
-    return Clamp((newMax - newMin)/(max - min) * (x - min) + newMin, newMin, newMax);
+export function Remap(x: number, start: number, end: number, newStart: number, newEnd: number) {
+    return Clamp((newEnd - newStart)/(end - start) * (x - start) + newStart, newStart, newEnd);
 }
 
 /**
  * Performs a linear normalization of the given number `x` to be between 0 and 1
  *  given the bounds of `x`.
  *
- * @param x The number to normalize
- * @param min The lower bound of `x`
- * @param max The upper bound of `x`
- * @returns A normalized version of `x` linearly between 0 and 1
+ * @param x     The number to normalize
+ * @param start The "start" value of `x`, i.e. what mapped 0 corresponds to
+ * @param end   The "end" value of `x`, i.e. what mapped 1 corresponds to
+ * @returns     A normalized version of `x` linearly between 0 and 1
  */
-export function Normalize(x: number, min: number, max: number) {
-    return Remap(x, min, max, 0, 1);
+export function Normalize(x: number, start: number, end: number) {
+    return Remap(x, start, end, 0, 1);
 }
 
 /**
  * Performs a non-linear normalization of the given number `x` to be between 0 and 1
  *  using a fractional exponentation with `f` and the bounds of `x`.
  *
- * @param x The number to normalize
- * @param min The lower bound of `x`
- * @param max The upper bound of `x`
- * @param f The fraction for the
- * @returns A normalized version of `x` non-linearly between 0 and 1
+ * @param x     The number to normalize
+ * @param start The "start" value of `x`, i.e. what mapped 0 corresponds to
+ * @param end   The "end" value of `x`, i.e. what mapped 1 corresponds to
+ * @param f     The fraction for the
+ * @returns     A normalized version of `x` non-linearly between 0 and 1
  */
-export function FractionalNormalize(x: number, min: number, max: number, f: number) {
-    return Math.pow(1 - Math.pow(1 - Normalize(x, min, max), f), 1/f);
+export function FractionalNormalize(x: number, start: number, end: number, f: number) {
+    return Math.pow(1 - Math.pow(1 - Normalize(x, start, end), f), 1/f);
 }
 
 /**
@@ -54,4 +54,10 @@ export function FractionalNormalize(x: number, min: number, max: number, f: numb
  */
 export function Lerp(t: number, start: number, end: number) {
     return (1 - t) * start + (t) * end;
+}
+
+
+
+export function PolarToCartesian(r: number, a: number) {
+    return { x: r * Math.cos(a), y: r * Math.sin(a) };
 }

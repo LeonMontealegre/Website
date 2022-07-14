@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import {useEffect, useMemo, useState} from "react";
-import {Clamp, FractionalNormalize, Lerp, Normalize} from "utils/math";
+import {Clamp, FractionalNormalize, Lerp, Normalize, PolarToCartesian} from "utils/math";
 import {useWindowSize} from "utils/useWindowSize";
 
 import styles from "./index.module.scss";
@@ -25,6 +25,9 @@ const OriginPos = {
     x: 13, y: 13
 };
 
+const RESIZE_END_AMT = 0.2;
+const RESIZE_SCALING_AMT = 0.7;
+
 const CIRCLES: CircleButton[] = [
     { href: "/",           text: "Home",       radius: 10, color: "#cdad46", pos: { r:   0, a:  0 }, fontSize: 4   },
     { href: "/about",      text: "About",      radius:  5, color: "#569cd6", pos: { r:  28, a: 45 }, fontSize: 2.5 },
@@ -45,37 +48,32 @@ const Home: NextPage = () => {
 
 
     // Updates the circles by the current window-ratio in the following way:
-    // For a ratio <= 0.8  : Lerp positions down to being vertical
-    // For a ratio <= 1.0  : Scale the circles down
-    // For any other ratio : Stay the same, but scale with the height of the screen
+    // For a ratio <= 1.0  : Lerp positions from initial angles to being vertical
+    // For a ratio >  1.0  : Lerp positions from initial angles to being horizontal
     const curCircles = useMemo(() => !show ? [] :
         CIRCLES.map(({ radius, pos: { r, a }, fontSize, ...rest }) => {
             const ratio = w/h;
 
-            const [angle, scale] = (() => {
-                // This essentially just lerps the positions of each circle
-                //  as a function of the ratio between a ratio of 0.2 and 0.8
-                if (ratio <= 4/5) {
-                    // Do a non-linear normalization for a more interesting effect
-                    const t = FractionalNormalize(ratio, 4/5, 1/5, 8/5);
-                    return [Lerp(t, a, +Math.PI/2), 4/5];
-                }
-
-                const scale = (ratio <= 1) ? (ratio) : (1.0);
-                return [a, scale];
+            const [scale, angle] = (() => {
+                const t = Normalize((ratio <= 1.0 ? ratio : 1/ratio), 1, RESIZE_END_AMT);
+                const s = (ratio <= 1.0) ? (1) : (ratio);
+                return [
+                    Lerp(t, s, s*RESIZE_SCALING_AMT),
+                    Lerp(t, a, ((ratio <= 1.0) ? (Math.PI/2) : (0))),
+                ];
             })();
 
             const size = (2 * radius);
-            const x = r * Math.cos(angle) + OriginPos.x - radius;
-            const y = r * Math.sin(angle) + OriginPos.y - radius;
+            const { x, y } = PolarToCartesian(r, angle);
 
+            const s = scale * h / 100;
             return {
                 ...rest,
-                width:  `${size * scale * h / 100}px`,
-                height: `${size * scale * h / 100}px`,
+                width:  `${size * s}px`,
+                height: `${size * s}px`,
 
-                left: `${x * scale * h / 100}px`,
-                top:  `${y * scale * h / 100}px`,
+                left: `${(x + OriginPos.x - radius) * s}px`,
+                top:  `${(y + OriginPos.y - radius) * s}px`,
 
                 fontSize: `${(fontSize * scale)}vh`,
             };
