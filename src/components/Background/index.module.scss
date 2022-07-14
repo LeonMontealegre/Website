@@ -22,13 +22,20 @@
 
 .twinkling {
     @keyframes moveBack {
-        from { background-position: 0 0; }
-        to {   background-position: -10000px 5000px; }
+        0%   { transform: translate(-100px,    0); }
+        100% { transform: translate(   0, -100px); }
     }
 
-    background: transparent url("/img/twinkling.png") repeat top center;
+    position: absolute;
 
-    animation: moveBack 800s linear infinite;
+    left: 0;
+    top: 0;
+    width: calc(100% + 100px);
+    height: calc(100% + 100px);
+
+    background: transparent url("/img/twinkling.png") repeat center center;
+
+    animation: moveBack 5s linear infinite;
 
     // Make into slightly lighter gray, #151515
     filter: invert(0%) sepia(1%) saturate(5414%) hue-rotate(345deg) brightness(96%) contrast(84%);
@@ -36,8 +43,8 @@
 
 .shooting__star {
     @keyframes shootingStarAnimation {
-        0% { transform: translate(0, 0); opacity: 0; }
-        50% { opacity: var(--star-brightness, 1); }
+        0%   { transform: translate(0, 0); opacity: 0; }
+        50%  { opacity: var(--star-brightness, 1); }
         100% { transform: translate(var(--star-target-dx), var(--star-target-dy)); opacity: 0; }
     }
 
