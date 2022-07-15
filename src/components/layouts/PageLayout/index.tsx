@@ -12,7 +12,9 @@ export const PageLayout = ({ activePage, children }: Props) => (
     <div className={styles["wrapper"]}>
         <SideMenu activePage={activePage} />
         <div className={styles["container"]}>
-            {children}
+            <div className={styles["main"]}>
+                {children}
+            </div>
             <Footer />
         </div>
     </div>

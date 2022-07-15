@@ -20,6 +20,10 @@
 }
 
 .info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     position: absolute;
 
     width: 100%;
@@ -27,4 +31,15 @@
 
     left: 0;
     top: 0;
+
+    margin: 0;
+
+    font-weight: bolder;
+    font-size: larger;
+
+    & > h1 {
+        padding: 20px;
+        border-radius: 30px;
+        background-color: transparentize(#111, 0.1);
+    }
 }
