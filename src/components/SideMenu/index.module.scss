@@ -1,15 +1,23 @@
 
 .sidemenu {
-    position: fixed;
+    position: absolute;
 
     z-index: 4;
 
     left: 0;
     top: 0;
+    // display: inline-block;
+    // position: fixed;
+
+    // float: left;
+
+    // left: 0;
+    // top: 0;
 
     width: 200px;
     height: 100vh;
-    background-color: transparentize(#222, 0.2);
+
+    background-color: transparentize(#222, 0.05);
 
     & > div:first-child {
         height: 120px;

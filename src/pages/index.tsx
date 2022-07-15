@@ -1,10 +1,11 @@
-import type {NextPage} from "next";
+import type {NextPage}       from "next";
 import {useEffect, useState} from "react";
 
 import {useWindowSize} from "utils/useWindowSize";
-import {PLANETS} from "utils/planets";
+import {PLANETS}       from "utils/planets";
 
-import {Orbit} from "components/Orbit";
+import {Footer} from "components/Footer";
+import {Orbit}  from "components/Orbit";
 import {Planet} from "components/Planet";
 
 import styles from "./index.module.scss";
@@ -29,6 +30,9 @@ const Home: NextPage = () => {
             {PLANETS.map(p => (
                 <Planet key={p.text} w={w} h={h} planet={p} />
             ))}
+        </div>
+        <div className={styles["footer-wrapper"]}>
+            <Footer />
         </div>
     </div>);
 }

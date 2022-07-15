@@ -14,8 +14,8 @@ export const SideMenu = ({ activePage }: Props) => (
             <Link key={p.text} href={p.href}>
                 <div style={{
                     color: p.shineColor,
-                    backgroundColor: `${p.shineColor}22`,
-                    boxShadow: (p.text === activePage ? `inset 0 0 2px 2px ${p.borderColor}55` : ""),
+                    backgroundColor: `${p.shineColor}44`,
+                    boxShadow: (p.text === activePage ? `inset 0 0 3px 3px ${p.borderColor}77` : ""),
                 }}>
                     {p.text}
                 </div>
