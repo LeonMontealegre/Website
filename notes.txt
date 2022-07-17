@@ -19,3 +19,14 @@ finite differences:
 DESMOS:
 
 Calc.getState() to get JSON
+
+
+
+
+
+
+
+TODO:
+
+1. collapsing sidebar for mobile purposes
+2. other pages

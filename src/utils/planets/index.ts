@@ -22,6 +22,8 @@ export const PLANETS = [
     shineColor:  ColorToHex(Brighten(HexToColor(c.color), 1.0, false)),
     borderColor: ColorToHex(Brighten(HexToColor(c.color), 0.8)),
 
+    boxShadow: (i === 0),
+
     shadowRadius: (i === 0 ? 7 : 2),
 }));
 

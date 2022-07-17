@@ -22,7 +22,7 @@ export const Planet = ({ w, h, planet }: Props) => {
     const size = (2 * radius);
     const [x, y] = PolarToCartesian(dist, angle, OriginPos);
 
-    const { text, href, shadowRadius, borderColor } = planet;
+    const { text, href, shadowRadius, borderColor, boxShadow } = planet;
 
     return (
         <Link key={text} href={href}>
@@ -41,7 +41,7 @@ export const Planet = ({ w, h, planet }: Props) => {
                      )`,
 
                      // Box shadow halo around the planet
-                     boxShadow: `0 0 ${shadowRadius}px ${shadowRadius}px ${borderColor}`,
+                     boxShadow: (boxShadow ? `0 0 ${shadowRadius}px ${shadowRadius}px ${borderColor}` : ""),
                  }}>
                 <p style={{ fontSize: fontSize * s }}>{text}</p>
             </div>
