@@ -8,10 +8,9 @@ const Positions = [
     { x:  20, y:  20, a:  30},
     { x: -30, y:  10, a: -20},
     { x:  10, y:  10, a:  70},
-]
+];
 
-
-const Blog: NextPage = () => {
+const BlogPage: NextPage = () => {
     return (
         <PageLayout activePage="Blog">
             {Positions.map(({ a, x, y }, i) => (
@@ -28,5 +27,4 @@ const Blog: NextPage = () => {
     );
 }
 
-
-export default Blog;
+export default BlogPage;

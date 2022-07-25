@@ -1,0 +1,23 @@
+
+.info {
+    margin: 20px auto;
+    margin-top: 100px;
+    max-width: 1400px;
+
+    white-space: normal;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    & > ul {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        grid-gap: 1rem;
+        padding: 40px;
+        list-style-type: none;
+
+        & > li {
+            width: 100%;
+            text-align: center;
+        }
+    }
+}
