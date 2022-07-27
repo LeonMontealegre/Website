@@ -19,6 +19,10 @@ const nextConfig = {
 
     // Append the default value with md extensions
     pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
+
+    images: {
+        domains: ["img.youtube.com"],
+    },
 }
 
 export default withMDX(nextConfig);

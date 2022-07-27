@@ -1,5 +1,7 @@
 import {PageLayout} from "components/layouts/PageLayout";
 import type {NextPage} from "next";
+import Image, {ImageLoader} from "next/image";
+import {useState} from "react";
 
 import styles from "./index.module.scss";
 
@@ -17,23 +19,46 @@ const ANIMATIONS = [
 ].map((a) => ({
     ...a,
     // Create YouTube URL from ID
-    src: `https://www.youtube.com/embed/${a.id}?feature=oembed&amp;amp;wmode=opaque`,
+    src: `https://www.youtube.com/embed/${a.id}?feature=oembed&wmode=opaque&autoplay=1`,
 }));
 
+
+const thumbnailLoader: ImageLoader = (({ src: id }) => `https://img.youtube.com/vi/${id}/sddefault.jpg`);
+
 const AnimationsPage: NextPage = () => {
+    const [loadedVids, setLoadedVids] = useState(ANIMATIONS.map(_ => false));
+
+    const playVid = (i: number) => (
+        setLoadedVids([...loadedVids.slice(0,i), true, ...loadedVids.slice(i+1)])
+    );
+
     return (
         <PageLayout activePage="Animations">
             <div className={styles["info"]}>
                 <ul>
-                    {ANIMATIONS.map(({ title, id, src }) => (
+                    {ANIMATIONS.map(({ title, id, src }, i) => (
                         <li key={id}>
-                            <iframe
-                                title={title}
-                                src={src}
-                                width="400px" height="225px"
-                                frameBorder={0}
-                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen />
+                            {loadedVids[i]
+                                ? (
+                                    <iframe
+                                        title={title}
+                                        src={src}
+                                        width="400px" height="225px"
+                                        frameBorder={0}
+                                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen />
+                                ) : (
+                                    <div role="button"
+                                         onClick={() => playVid(i)}>
+                                        <Image
+                                            title={title}
+                                            loader={thumbnailLoader}
+                                            src={id}
+                                            width="400px" height="225px"
+                                            alt={title}
+                                            />
+                                    </div>
+                                )}
                         </li>
                     ))}
                 </ul>
