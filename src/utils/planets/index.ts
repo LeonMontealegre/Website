@@ -7,11 +7,11 @@ export const OriginPos = {
 
 export const PLANETS = [
     { text: "Home",       radius: 10, color: "#f7ce48", pos: { r:   0, a:  0 }, orbitAngle:   0, fontSize: 4.0 },
-    { text: "About",      radius:  5, color: "#375772", pos: { r:  28, a: 45 }, orbitAngle: -15, fontSize: 2.5 },
-    { text: "Blog",       radius:  4, color: "#a3715d", pos: { r:  46, a: 10 }, orbitAngle: -35, fontSize: 2.3 },
-    { text: "Projects",   radius:  8, color: "#873939", pos: { r:  65, a: 70 }, orbitAngle: -45, fontSize: 3.1 },
-    { text: "Animations", radius:  6, color: "#6a9955", pos: { r:  85, a: 30 }, orbitAngle: -46, fontSize: 2.2 },
-    { text: "Models",     radius:  5, color: "#ae6ea9", pos: { r: 100, a: 50 }, orbitAngle: -49, fontSize: 2.2 },
+    { text: "About",      radius:  5, color: "#477ba6", pos: { r:  28, a: 45 }, orbitAngle: -15, fontSize: 2.5 },
+    { text: "Blog",       radius:  4, color: "#d48e72", pos: { r:  46, a: 10 }, orbitAngle: -35, fontSize: 2.3 },
+    { text: "Projects",   radius:  8, color: "#c24646", pos: { r:  65, a: 70 }, orbitAngle: -45, fontSize: 3.1 },
+    { text: "Animations", radius:  6, color: "#84c267", pos: { r:  85, a: 30 }, orbitAngle: -46, fontSize: 2.2 },
+    { text: "Models",     radius:  5, color: "#d180ca", pos: { r: 100, a: 50 }, orbitAngle: -49, fontSize: 2.2 },
 ].map((c, i) => ({
     ...c,
     pos: { r: c.pos.r, a: c.pos.a * Math.PI/180 },
@@ -19,7 +19,7 @@ export const PLANETS = [
 
     href: (i === 0 ? "/" : `/${c.text.toLowerCase()}`),
 
-    shineColor:  ColorToHex(Brighten(HexToColor(c.color), 1.0, false)),
+    shineColor:  (i > 0 ? ColorToHex(Brighten(HexToColor(c.color), 0.7, true)) : c.color),
     borderColor: ColorToHex(Brighten(HexToColor(c.color), 0.8)),
 
     boxShadow: (i === 0),

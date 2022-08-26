@@ -35,10 +35,10 @@ export function ClampColor({ r, g, b }: Color) {
 
 export function Brighten(col: Color, amt: number, useHSL = false): Color {
     if (useHSL) {
-        const [h, s, l] = rgbToHsl(col);
+        const [h, s, _] = rgbToHsl(col);
         return ClampColor(hslToRgb([ h, s, amt ]));
     }
-    const [h, s, v] = rgbToHsv(col);
+    const [h, s, _] = rgbToHsv(col);
     return ClampColor(hsvToRgb([ h, s, amt ]));
 }
 
