@@ -53,23 +53,21 @@ const GenRandomStar = (i: number, isShooting = false): StarProps => {
     };
 }
 
-const stars = Array(NUM_STARS).fill(0).map((_, i) => (GenRandomStar(i)));
-const shootingStars = Array(NUM_SHOOTING_STARS).fill(0).map((_, i) => (GenRandomStar(i, true)));
-
-
 export const Background = () => {
-    const [showStars, setShowStars] = useState(false);
+    const [stars,         setStars]         = useState([] as StarProps[]);
+    const [shootingStars, setShootingStars] = useState([] as StarProps[]);
 
     useEffect(() => {
-        // Wait for hydration to finish then show stars
-        setShowStars(true);
+        // Wait for hydration to finish then generate stars
+        setStars(Array(NUM_STARS).fill(0).map((_, i) => (GenRandomStar(i))));
+        setShootingStars(Array(NUM_SHOOTING_STARS).fill(0).map((_, i) => (GenRandomStar(i, true))));
     }, []);
 
-    return useMemo(() => (
+    return (
         <div className={styles["background"]}>
-            <svg>{showStars &&         stars.map((star, i) => <Star key={`star-${i}`} {...star} />)}</svg>
+            <svg>{        stars.map((star, i) => <Star key={`star-${i}`} {...star} />)}</svg>
             <div className={styles["twinkling"]}></div>
-            <svg>{showStars && shootingStars.map((star, i) => <Star key={`star-${i}`} {...star} />)}</svg>
+            <svg>{shootingStars.map((star, i) => <Star key={`star-${i}`} {...star} />)}</svg>
         </div>
-    ), [showStars]);
+    );
 }
