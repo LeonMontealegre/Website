@@ -23,6 +23,10 @@ const nextConfig = {
     images: {
         domains: ["img.youtube.com"],
     },
+
+    rewrites: async () => [
+        // { source: "/projects/:proj/app/index.html", destination: "/api/project/:proj" },
+    ],
 }
 
 export default withMDX(nextConfig);

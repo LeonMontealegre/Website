@@ -22,8 +22,8 @@ const PROJECTS = [
         desc:  "A simple simulation of a double pendulum using my own Physics library with all computation " +
                "performed in Web Assembly",
         links: {
-            first:  ["Open Simulation", "/DoublePendulum/app"],
-            second: ["More Info", "/DoublePendulum"],
+            first:  ["Open Simulation", "/projects/DoublePendulum/app/index.html"],
+            second: ["More Info", "/projects/DoublePendulum"],
         },
     },
     {
@@ -31,8 +31,8 @@ const PROJECTS = [
         title: "Shallow Water Equations",
         desc:  "C++/OpenGL Simulation of the Shallow Water Equations",
         links: {
-            first:  ["Paper", "/SWEs/paper"],
-            second: ["More Info", "/SWEs"],
+            first:  ["Paper", "/projects/SWEs/paper.pdf"],
+            second: ["More Info", "/projects/SWEs"],
         },
     },
     {
@@ -41,8 +41,8 @@ const PROJECTS = [
         desc:  "JS and C++/OpenGL Simulation of fluids using Smoothed Particle Hydrodynamics",
         tag:   "SPH",
         links: {
-            first:  ["Presentation", "/SPH/presentation"],
-            second: ["More Info", "/SPH"],
+            first:  ["Presentation", "/projects/SPH/app/index.html"],
+            second: ["More Info", "/projects/SPH"],
         },
     },
     {
@@ -50,8 +50,8 @@ const PROJECTS = [
         title: "Mandelbrot Set",
         desc:  "A simple, interactive Mandelbrot set visualizer using JS + WebGL (golfed to <1500 characters)",
         links: {
-            first:  ["Open Visualizer", "/Mandelbrot/app"],
-            second: ["More Info", "/Mandelbrot"],
+            first:  ["Open Visualizer", "/projects/Mandelbrot/app/index.html"],
+            second: ["More Info", "/projects/Mandelbrot"],
         },
     },
     {
@@ -61,8 +61,8 @@ const PROJECTS = [
                "how solar systems are formed.",
         tag:   "Nebular Hypothesis",
         links: {
-            first:  ["Open Visualizer", "/NebularHypothesis/app"],
-            second: ["More Info", "/NebularHypothesis"],
+            first:  ["Open Visualizer", "/projects/NebularHypothesis/app/index.html"],
+            second: ["More Info", "/projects/NebularHypothesis"],
         },
     },
     {
@@ -70,8 +70,8 @@ const PROJECTS = [
         title: "Gravity",
         desc:  "A simple, interactive simulation of gravitational attraction between bodies.",
         links: {
-            first:  ["Open Visualizer", "/Gravity/app"],
-            second: ["More Info", "/Gravity"],
+            first:  ["Open Visualizer", "/projects/Gravity/app/index.html"],
+            second: ["More Info", "/projects/Gravity"],
         },
     },
 ].map(p => ({
@@ -102,14 +102,14 @@ const ProjectsPage: NextPage = () => {
                                                {...(() => (links.first[1].startsWith("/")
                                                             ? {}
                                                             : { target: "_blank", rel: "noreferrer" }
-                                                          ))}>
+                                                          ))()}>
                                                 {links.first[0]}
                                             </a>
                                             <a href={links.second[1]}
                                                {...(() => (links.second[1].startsWith("/")
                                                             ? {}
                                                             : { target: "_blank", rel: "noreferrer" }
-                                                          ))}>
+                                                          ))()}>
                                                 {links.second[0]}
                                             </a>
                                         </div>

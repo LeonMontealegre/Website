@@ -1,0 +1,168 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <!-- Primary Meta Tags -->
+        <title>Mandelbrot Visualization</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+        <meta name="title" content="Mandelbrot Visualization">
+        <meta name="description" content="Mandelbrot set interactive visualization. Personal website and online portfolio for Leon Montealegre">
+        <meta name="keywords" content="leon,montealegre,leonmontealegre,personal,website,portfolio,resume,job,internship,computer,science,cs,blog,animations,models,projects,cool,interactive,creative">
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="http://www.leonmontealeg.re/">
+        <meta property="og:title" content="Mandelbrot Visualization">
+        <meta property="og:description" content="Mandelbrot set interactive visualization. Personal website and online portfolio for Leon Montealegre">
+        <meta property="og:image" content="">
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="http://www.leonmontealeg.re/">
+        <meta property="twitter:title" content="Mandelbrot Visualization">
+        <meta property="twitter:description" content="Mandelbrot set interactive visualization. Personal website and online portfolio for Leon Montealegre">
+        <meta property="twitter:image" content="">
+
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+    </head>
+    <body style="margin: 0">
+        <canvas id="glcanvas" width="640" height="480"/>
+        <shader id="vertex-shader">
+            attribute vec3 inPosition;
+            void main() {
+                gl_Position = vec4(inPosition, 1.0);
+            }
+        </shader>
+        <shader id="fragment-shader">
+            precision highp float;
+
+            uniform vec2 resolution;
+            uniform float zoom;
+            uniform vec2 offset;
+
+            void main() {
+                vec2 uv = (gl_FragCoord.xy/resolution * vec2(4,4) - vec2(2,2))/zoom + offset;
+                uv.y *= resolution.y/resolution.x;
+                vec2 z = vec2(0);
+                int ai;
+                for (int i = 0; i < 200; i++) {
+                    ai = i;
+                    z = vec2(z.x*z.x - z.y*z.y, 2.0*z.x*z.y) + uv;
+                    if (length(z) >= 2.0)
+                        break;
+                }
+                <!-- float col = (1. - 2./length(z)) * 2. * 3.14159265; -->
+                <!-- gl_FragColor = vec4(sin(col), cos(col), sin(col+3.1415159), 1); -->
+                <!-- gl_FragColor = vec4(vec3(col), 1); -->
+                gl_FragColor = vec4(vec3(1. + 1./log(float(ai)/200.)), 1);
+            }
+        </shader>
+        <script>
+            // Setup canvas and WebGL
+            var canvas = document.getElementById('glcanvas');
+            var gl = canvas.getContext('webgl');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', onResize, false);
+            canvas.addEventListener('mousedown', onMouseDown, false);
+            canvas.addEventListener('mouseup', onMouseUp, false);
+            canvas.addEventListener('mousemove', onMouseMove, false);
+            canvas.addEventListener('wheel', onWheel, false);
+
+            // Create buffers
+            var vbo = addBuffer(gl.ARRAY_BUFFER, new Float32Array([-1,1,0, -1,-1,0, 1,-1,0, 1,1,0]));
+            var ibo = addBuffer(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array([3,2,1,3,1,0]));
+            gl.enableVertexAttribArray(0);
+            gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
+
+            // Create shaders
+            var vs = addShader(gl.VERTEX_SHADER, 'vertex-shader');
+            var fs = addShader(gl.FRAGMENT_SHADER, 'fragment-shader');
+            var program = gl.createProgram();
+            gl.attachShader(program, vs);
+            gl.attachShader(program, fs);
+            gl.bindAttribLocation(program, 0, 'inPosition');
+            gl.linkProgram(program);
+            gl.validateProgram(program);
+            gl.useProgram(program);
+
+            // Setup uniforms
+            var resLoc = gl.getUniformLocation(program, 'resolution');
+            var zoomLoc = gl.getUniformLocation(program, 'zoom');
+            var offsetLoc = gl.getUniformLocation(program, 'offset');
+
+            // Setup changing variables
+            var mouseDown = false;
+            var mousePosition = {x:0, y:0};
+            var prevMousePosition = {x:0, y:0};
+            var zoom = 1;
+
+            function draw() {
+                gl.viewport(0, 0, canvas.width, canvas.height);
+                gl.uniform2f(resLoc, canvas.width, canvas.height);//640, 480);//Math.min(canvas.width,canvas.height), Math.max(canvas.width,canvas.height));
+                gl.uniform1f(zoomLoc, zoom*zoom);
+                gl.uniform2f(offsetLoc, mousePosition.x, mousePosition.y);
+
+                gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+            }
+
+            draw();
+
+            function onMouseDown(e) {
+                mouseDown = true;
+            }
+            function onMouseUp(e) {
+                mouseDown = false;
+            }
+            function onMouseMove(e) {
+                var x = 0.5 - e.clientX / canvas.width;
+                var y = e.clientY / canvas.height + 0.5;
+                if (mouseDown) {
+                    mousePosition.x += 2*(x - prevMousePosition.x)/(zoom*zoom);
+                    mousePosition.y += 2*(y - prevMousePosition.y)/(zoom*zoom);
+
+                    draw();
+                }
+                prevMousePosition.x = x;
+                prevMousePosition.y = y;
+            }
+            function onWheel(e) {
+                zoom = Math.max(Math.min(zoom + e.wheelDelta/100, 1000), 0.5);
+                draw();
+                e.preventDefault();
+            }
+            function onResize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                draw();
+            }
+            function addBuffer(type, array) {
+                var buf = gl.createBuffer();
+                gl.bindBuffer(type, buf);
+                gl.bufferData(type, array, gl.STATIC_DRAW);
+                return buf;
+            }
+            function addShader(type, id) {
+                var shader = gl.createShader(type);
+                gl.shaderSource(shader, document.getElementById(id).textContent);
+                gl.compileShader(shader);
+                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                    console.log("An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader));
+                    return null;
+                }
+                return shader;
+            }
+        </script>
+    </body>
+
+</html>
