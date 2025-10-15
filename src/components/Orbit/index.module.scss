@@ -20,7 +20,11 @@
         border-radius: inherit;
         background: inherit;
     }
-    &::before {
-        filter: blur(50px);
-    }
+    // &::before {
+    //     filter: blur(50px);
+
+    //     // To make it not laggy (rasterize?)
+    //     backface-visibility: hidden;
+    //     transform: translateZ(0);
+    // }
 }

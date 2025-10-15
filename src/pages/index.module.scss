@@ -1,4 +1,13 @@
 
+.parent-container {
+    position: absolute;
+
+    width: 100vw;
+    height: 100vh;
+
+    overflow: hidden;
+}
+
 .container {
     position: absolute;
 
@@ -8,6 +17,12 @@
     height: 100vh;
 
     overflow: hidden;
+
+    will-change: transform;
+}
+
+.orbit-container {
+    transition: linear opacity 0.3s;
 }
 
 .footer-wrapper {

@@ -27,3 +27,14 @@ export const useWindowSize = () => {
 
     return size;
 }
+
+export const useOnResize = (callback: () => void) => {
+    useEffect(() => {
+        const onResize = () => callback();
+
+        window.addEventListener("resize", onResize);
+
+        // Remove event listener on cleanup
+        return () => window.removeEventListener("resize", onResize);
+    }, []);
+}

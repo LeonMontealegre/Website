@@ -17,25 +17,28 @@ type Props = {
 export const Orbit = ({ w, h, planet }: Props) => {
     const { pos: { r: r0, a: a0 }, orbitAngle } = planet;
 
-    const [r, t, s] = GetInterpolationFactors(w, h);
+    const [a, b, s, oangle] = useMemo(() => {
+        const [r, t, s] = GetInterpolationFactors(w, h);
 
-    // Get current angle and orbit angle
-    const angle  = Lerp(t, a0,         ((r <= 1.0) ? ( Math.PI/2) : (0)));
-    const oangle = Lerp(t, orbitAngle, ((r <= 1.0) ? (-Math.PI/2) : (0)));
+        // Get current angle and orbit angle
+        const angle  = Lerp(t, a0,         ((r <= 1.0) ? ( Math.PI/2) : (0)));
+        const oangle = Lerp(t, orbitAngle, ((r <= 1.0) ? (-Math.PI/2) : (0)));
+    
+        // Get current cartesian coordinates and then rotate them into ellipse's-space
+        const [x, y] = PolarToCartesian(r0, angle);
+        const [u, v] = Rotate(x, y, oangle);
+    
+        // Calculate ellipse parameters which dictate width/height of div
+        const a = Math.sqrt(u**2 + v**2 / ECCENTRICITY**2);
+        const b = a * ECCENTRICITY;
 
-    // Get current cartesian coordinates and then rotate them into ellipse's-space
-    const [x, y] = PolarToCartesian(r0, angle);
-    const [u, v] = Rotate(x, y, oangle);
-
-    // Calculate ellipse parameters which dictate width/height of div
-    const a = Math.sqrt(u**2 + v**2 / ECCENTRICITY**2);
-    const b = a * ECCENTRICITY;
+        return [a, b, s, oangle];
+    }, [w, h]);
 
     const { text, shadowRadius, borderColor } = planet;
 
     return (
-        <div key={`${text}-orbit`}
-             className={styles["orbit"]}
+        <div className={styles["orbit"]}
              style={{
                  left: `${OriginPos.x * s}px`,  top: `${OriginPos.y * s}px`,
                  width: `${2 * a * s}px`, height: `${2 * b * s}px`,

@@ -17,16 +17,25 @@ const withMDX = mdx({
 const nextConfig = {
     reactStrictMode: true,
 
+    output: "export",
+
     // Append the default value with md extensions
     pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
 
     images: {
-        domains: ["img.youtube.com"],
+        domains: ["https://img.youtube.com"],
+        unoptimized: true,
     },
 
     rewrites: async () => [
         // { source: "/projects/:proj/app/index.html", destination: "/api/project/:proj" },
     ],
+
+    experimental: {
+        images: {
+            layoutRaw: true,
+        },
+    },
 }
 
 export default withMDX(nextConfig);

@@ -5,7 +5,7 @@ import {useMemo} from "react";
 import styles from "./index.module.scss";
 
 
-const NUM_STARS = 100;
+const NUM_STARS = 1000;
 const NUM_SHOOTING_STARS = 4;
 
 type StarProps = {
