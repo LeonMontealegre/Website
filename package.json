@@ -12,7 +12,7 @@
   "dependencies": {
     "@next/mdx": "^12.1.6",
     "desmos": "^1.5.4",
-    "next": "^14.2.3",
+    "next": "^14.2.32",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "rehype-katex": "^6.0.2",
