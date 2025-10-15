@@ -1,3 +1,5 @@
+import {BackArrow} from "components/BackArrow";
+
 import styles from "./index.module.scss";
 
 
@@ -7,8 +9,7 @@ type AboutPageProps = {
 export const AboutPage = ({ onBackClick }: AboutPageProps) => {
     return (
         <main className={styles["container"]}>
-            <p style={{ fontSize: 40, lineHeight: 0, color: "black" }}
-               onClick={onBackClick}>&#x2BC5;</p>
+            <BackArrow onBackClick={onBackClick} />
             <h1 id="about">
                 My name is <span className="text-success">Leon Montealegre</span> and I am a
                 Site Reliability Engineer at

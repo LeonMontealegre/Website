@@ -1,5 +1,7 @@
-import styles from "./index.module.scss";
 import {GetMoonInfo, MoonInfo} from "utils/planets";
+import {BackArrow} from "components/BackArrow";
+
+import styles from "./index.module.scss";
 
 
 type BaseProjectPageProps = {
@@ -12,8 +14,7 @@ type BaseProjectPageProps = {
 const BaseProjectPage = ({ project, imgHeight, onBackClick, children }: BaseProjectPageProps) => {
     return (
         <main className={styles["content"]} role="main">
-            <p style={{ fontSize: 40, lineHeight: 0, color: "black" }}
-               onClick={onBackClick}>&#x2BC5;</p>
+            <BackArrow onBackClick={onBackClick} />
             <img alt={`${project.title} thumbnail`} src={project.banner} style={{ height: `${imgHeight}px` }} />
             <h1>{project.title}</h1>
             <div className={styles["main-text"]}>

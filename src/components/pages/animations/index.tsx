@@ -1,6 +1,8 @@
 import Image, {ImageLoader} from "next/image";
 import {useState} from "react";
 
+import {BackArrow} from "components/BackArrow";
+
 import styles from "./index.module.scss";
 
 
@@ -35,8 +37,7 @@ export const AnimationsPage = ({ onBackClick }: Props) => {
 
     return (
         <main className={styles["container"]}>
-            <p style={{ fontSize: 40, lineHeight: 0, color: "black" }}
-                onClick={onBackClick}>&#x2BC5;</p>
+            <BackArrow onBackClick={onBackClick} />
             <div className={styles["info"]}>
                 <ul>
                     {ANIMATIONS.map(({ title, id, src }, i) => (

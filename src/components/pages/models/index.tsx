@@ -1,3 +1,5 @@
+import {BackArrow} from "components/BackArrow";
+
 import styles from "./index.module.scss";
 
 
@@ -26,8 +28,7 @@ type Props = {
 export const ModelsPage = ({ onBackClick }: Props) => {
     return (
         <main className={styles["container"]}>
-            <p style={{ fontSize: 40, lineHeight: 0, color: "black" }}
-                onClick={onBackClick}>&#x2BC5;</p>
+            <BackArrow onBackClick={onBackClick} />
             <div className={styles["info"]}>
                 <ul>
                     {MODELS.map(({ title, id, src }) => (
