@@ -33,7 +33,7 @@ export const AboutPage = ({ onBackClick }: AboutPageProps) => {
                 <p>My resume can be seen below</p>
             </h1>
             <div>
-                <embed src="/res/resume.pdf#toolbar=0" width="100%" height="1020" />
+                <embed src="/other/resume.pdf#toolbar=0" width="100%" height="1020" />
             </div>
         </main>
     );
